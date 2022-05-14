@@ -1,22 +1,20 @@
 package com.ykb.ATMS.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="student")
-public class Student {
+@Table(name="lecturer")
+public class Lecturer {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,20 +32,15 @@ public class Student {
 	
 	@Column(name="password")
 	private String password;
-	
-	@ManyToMany(fetch = FetchType.LAZY, 
-			cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
-	@JoinTable(
-			name="team_student",
-			joinColumns = @JoinColumn(name="student_id"),
-			inverseJoinColumns = @JoinColumn(name="team_id")
-			)
-	private List<Team> students;
 
-	public Student() {
+	@OneToMany(mappedBy="lecturer",
+			cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+	private List<Assignment> assignments;
+	
+	public Lecturer() {
 	}
 
-	public Student(String firstName, String lastName, String email, String password, String intake) {
+	public Lecturer(String firstName, String lastName, String email, String password) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
@@ -94,18 +87,28 @@ public class Student {
 		this.password = password;
 	}
 
-	public List<Team> getStudents() {
-		return students;
+	public List<Assignment> getAssignments() {
+		return assignments;
 	}
 
-	public void setStudents(List<Team> students) {
-		this.students = students;
+	public void setAssignments(List<Assignment> assignments) {
+		this.assignments = assignments;
+	}
+	
+	public void add(Assignment assignment) {
+		if(this.assignments == null) {
+			this.assignments=new ArrayList<>();
+		}
+		
+		this.assignments.add(assignment);
+		
+		assignment.setLecturer(this);
 	}
 
 	@Override
 	public String toString() {
 		return "Student [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
-				+ ", password=" + password +"]";
+				+ ", password=" + password + "]";
 	}
 	
 }

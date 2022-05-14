@@ -1,4 +1,4 @@
-package com.ykb.ATMS.service;
+package com.ykb.ATMS.service.Implementation;
 
 import java.util.List;
 import java.util.Optional;
@@ -6,8 +6,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ykb.ATMS.dao.StudentRepository;
 import com.ykb.ATMS.entity.Student;
+import com.ykb.ATMS.repository.StudentRepository;
+import com.ykb.ATMS.service.Interface.IStudentService;
 
 @Service
 public class StudentService implements IStudentService {
@@ -25,7 +26,7 @@ public class StudentService implements IStudentService {
 	}
 
 	@Override
-	public Student findById(int id) {
+	public Student findById(long id) {
 		Optional<Student> result = studentRepository.findById(id);
 		
 		Student student=null;
@@ -45,7 +46,7 @@ public class StudentService implements IStudentService {
 	}
 
 	@Override
-	public void deleteById(int id) {
+	public void deleteById(long id) {
 		
 		studentRepository.deleteById(id);
 	}

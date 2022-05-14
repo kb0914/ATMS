@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ykb.ATMS.entity.Student;
-import com.ykb.ATMS.service.StudentService;
+import com.ykb.ATMS.service.Implementation.StudentService;
 
 @RestController
 @RequestMapping("api/")
 @CrossOrigin
 public class StudentRestController {
 
-private StudentService studentService;
+	private StudentService studentService;
 	
 	@Autowired
 	public StudentRestController(StudentService studentService) {
@@ -34,11 +34,11 @@ private StudentService studentService;
 	}
 	
 	@GetMapping("/students/{studentId}")
-	public Student findById(@PathVariable int studentId){
+	public Student findById(@PathVariable long studentId){
 		
 		Student student = studentService.findById(studentId);
 		if(student==null)
-			throw new RuntimeException("students id not found - " + studentId);
+			throw new RuntimeException("Student id not found - " + studentId);
 		
 		return student;
 	}
@@ -62,12 +62,12 @@ private StudentService studentService;
 	}
 	
 	@DeleteMapping("/students/{studentId}")
-	public Student deleteById(@PathVariable int studentId){
+	public Student deleteById(@PathVariable long studentId){
 		
 		Student student = studentService.findById(studentId);
 		
 		if(student==null)
-			throw new RuntimeException("Employee id not found - " + studentId);
+			throw new RuntimeException("Student id not found - " + studentId);
 		
 		studentService.deleteById(studentId);
 		
