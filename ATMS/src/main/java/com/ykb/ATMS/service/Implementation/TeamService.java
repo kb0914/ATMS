@@ -49,7 +49,7 @@ public class TeamService implements ITeamService{
 		
 		Assignment assignment=assignmentService.findById(aid);
 		assignment.addTeam(team);
-		assignmentService.save(assignment, aid);
+		assignmentService.update(assignment);
 	}
 
 	@Override
