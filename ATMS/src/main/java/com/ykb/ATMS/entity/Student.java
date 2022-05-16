@@ -14,6 +14,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="student")
 public class Student {
@@ -37,12 +39,13 @@ public class Student {
 	
 	@ManyToMany(fetch = FetchType.LAZY, 
 			cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+	@JsonIgnore
 	@JoinTable(
 			name="team_student",
 			joinColumns = @JoinColumn(name="student_id"),
 			inverseJoinColumns = @JoinColumn(name="team_id")
 			)
-	private List<Team> students;
+	private List<Team> teams;
 
 	public Student() {
 	}
@@ -94,12 +97,12 @@ public class Student {
 		this.password = password;
 	}
 
-	public List<Team> getStudents() {
-		return students;
+	public List<Team> getTeams() {
+		return teams;
 	}
 
-	public void setStudents(List<Team> students) {
-		this.students = students;
+	public void setTeams(List<Team> teams) {
+		this.teams = teams;
 	}
 
 	@Override

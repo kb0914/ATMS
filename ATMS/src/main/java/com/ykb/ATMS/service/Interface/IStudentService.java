@@ -13,4 +13,6 @@ public interface IStudentService {
 	public void save(Student student);
 	
 	public void deleteById(long id);
+
+	List<Student> findByFirstName(String name);
 }

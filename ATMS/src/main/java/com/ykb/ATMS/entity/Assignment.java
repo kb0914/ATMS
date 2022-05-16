@@ -2,12 +2,13 @@ package com.ykb.ATMS.entity;
 
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,6 +16,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="assignemnt")
@@ -37,12 +40,16 @@ public class Assignment {
 	@Column(name="due_date")
 	private String dueDate;
 	
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+	@ManyToOne(fetch = FetchType.LAZY,
+			cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
 	@JoinColumn(name="lecturer_id")
+	@JsonIgnore
 	private Lecturer lecturer;
 	
 	@OneToMany(mappedBy="assignment",
+			fetch = FetchType.LAZY,
 			cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+	@JsonIgnore
 	private List<Team> team;
 
 	public Assignment() {}
@@ -111,23 +118,14 @@ public class Assignment {
 		this.lecturer = lecturer;
 	}
 	
-
-	public List<Team> getGroupings() {
-		return team;
-	}
-
-	public void setGroupings(List<Team> groupings) {
-		this.team = groupings;
-	}
-	
-	public void addTeam(Team grouping) {
+	public void addTeam(Team team) {
 		if(this.team == null) {
 			this.team=new ArrayList<>();
 		}
 		
-		this.team.add(grouping);
+		this.team.add(team);
 		
-		grouping.setAssingment(this);
+		team.setAssingment(this);
 	}
 
 	@Override

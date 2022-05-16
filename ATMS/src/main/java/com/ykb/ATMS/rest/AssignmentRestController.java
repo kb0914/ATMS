@@ -1,5 +1,6 @@
 package com.ykb.ATMS.rest;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,17 +48,16 @@ public class AssignmentRestController {
 	
 	@PostMapping("/assignments/{lid}")
 	public Assignment addAssignment(@RequestBody Assignment assignment, @PathVariable long lid){
-		
-		assignmentService.save(assignment, lid);
+		//assignment.setAssignDate(new Date());
+		assignmentService.create(assignment, lid);
 		
 		return assignment;
 	}
 	
-	
 	@PutMapping("/assignments")
 	public Assignment updateAssignment(@RequestBody Assignment assignment){
 		
-		assignmentService.save(assignment, assignment.getId());
+		assignmentService.update(assignment);
 		
 		return assignment;
 	}

@@ -11,7 +11,9 @@ public List<Assignment> findAll();
 	
 	public Assignment findById(long id);
 	
-	public void save(Assignment assignment, long lid);
+	public void create(Assignment assignment, long lid);
 	
 	public void deleteById(long id);
+	
+	public void update(Assignment assignment);
 }

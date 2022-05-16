@@ -38,7 +38,7 @@ public class LecturerRestController {
 		
 		Lecturer student = lecturerService.findById(id);
 		if(student==null)
-			throw new RuntimeException("students id not found - " + id);
+			throw new RuntimeException("lecturer id not found - " + id);
 		
 		return student;
 	}

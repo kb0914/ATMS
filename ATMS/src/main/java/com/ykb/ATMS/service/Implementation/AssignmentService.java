@@ -1,11 +1,13 @@
  package com.ykb.ATMS.service.Implementation;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ykb.ATMS.constant.DateTimeFormatConstant;
 import com.ykb.ATMS.entity.Assignment;
 import com.ykb.ATMS.entity.Lecturer;
 import com.ykb.ATMS.repository.AssignmentRepository;
@@ -45,7 +47,7 @@ public class AssignmentService implements IAssignmentService{
 	}
 
 	@Override
-	public void save(Assignment assignment, long lid) {
+	public void create(Assignment assignment, long lid) {
 		Lecturer lecturer=lecturerService.findById(lid);
 		lecturer.add(assignment);
 		lecturerService.save(lecturer);
@@ -56,4 +58,10 @@ public class AssignmentService implements IAssignmentService{
 		assignmentRepository.deleteById(id);
 	}
 
+	@Override
+	public void update(Assignment assignment) {
+		assignmentRepository.save(assignment);
+	}
+	
+	
 }

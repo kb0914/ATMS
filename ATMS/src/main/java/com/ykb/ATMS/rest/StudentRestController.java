@@ -43,6 +43,12 @@ public class StudentRestController {
 		return student;
 	}
 	
+	@GetMapping("/students/search/{firstName}")
+	public List<Student> findByfirstName(@PathVariable String firstName){
+		
+		return studentService.findByFirstName(firstName);
+	}
+	
 	@PostMapping("/students")
 	public Student addEmployee(@RequestBody Student student){
 		
