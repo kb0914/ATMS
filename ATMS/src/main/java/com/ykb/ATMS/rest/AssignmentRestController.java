@@ -58,6 +58,7 @@ public class AssignmentRestController {
 	public Assignment updateAssignment(@RequestBody Assignment assignment){
 		
 		assignmentService.update(assignment);
+		System.out.println(assignment.getTeam());
 		
 		return assignment;
 	}

@@ -62,5 +62,12 @@ public class TeamService implements ITeamService{
 		team.addStudent(student);
 		teamRepository.save(team);
 	}
+	
+	@Override
+	public void deleteTeamMember(Team team, Student student) {
+		List<Student> students=team.getStudents();
+		students.remove(student);
+		teamRepository.save(team);
+	}
 
 }

@@ -17,4 +17,6 @@ public interface ITeamService {
 	public void deleteById(long id);
 	
 	public void addTeamMember(Team team, Student student);
+
+	void deleteTeamMember(Team team, Student student);
 }
