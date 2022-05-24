@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ykb.ATMS.DTO.SearchLecturerDTO;
+import com.ykb.ATMS.entity.Intake;
 import com.ykb.ATMS.entity.Lecturer;
 import com.ykb.ATMS.service.Interface.ILecturerService;
 
@@ -36,11 +38,17 @@ public class LecturerRestController {
 	@GetMapping("/lecturers/{id}")
 	public Lecturer findById(@PathVariable long id){
 		
-		Lecturer student = lecturerService.findById(id);
-		if(student==null)
+		Lecturer lecturer = lecturerService.findById(id);
+		if(lecturer==null)
 			throw new RuntimeException("lecturer id not found - " + id);
 		
-		return student;
+		return lecturer;
+	}
+	
+	@GetMapping("/lecturers/search/{keyword}")
+	public List<SearchLecturerDTO> findByCode(@PathVariable String keyword){
+		
+		return lecturerService.findByFirstName(keyword);
 	}
 	
 	@PostMapping("/lecturers")

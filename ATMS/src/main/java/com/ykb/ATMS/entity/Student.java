@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -46,6 +47,10 @@ public class Student {
 			inverseJoinColumns = @JoinColumn(name="team_id")
 			)
 	private List<Team> teams;
+	
+	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+	@JoinColumn(name="intake_id")
+	private Intake intake;
 
 	public Student() {
 	}
@@ -103,6 +108,14 @@ public class Student {
 
 	public void setTeams(List<Team> teams) {
 		this.teams = teams;
+	}
+
+	public Intake getIntake() {
+		return intake;
+	}
+
+	public void setIntake(Intake intake) {
+		this.intake = intake;
 	}
 
 	@Override

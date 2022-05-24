@@ -7,7 +7,7 @@ import com.ykb.ATMS.entity.Lecturer;
 
 public interface IAssignmentService {
 
-public List<Assignment> findAll();
+	public List<Assignment> findAll();
 	
 	public Assignment findById(long id);
 	

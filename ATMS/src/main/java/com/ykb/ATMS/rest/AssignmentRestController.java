@@ -1,6 +1,5 @@
 package com.ykb.ATMS.rest;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ykb.ATMS.entity.Assignment;
-import com.ykb.ATMS.entity.Lecturer;
 import com.ykb.ATMS.service.Interface.IAssignmentService;
-import com.ykb.ATMS.service.Interface.ILecturerService;
+import com.ykb.ATMS.service.Interface.IIntakeService;
 
 @RestController
 @RequestMapping("api/")
@@ -25,10 +23,12 @@ import com.ykb.ATMS.service.Interface.ILecturerService;
 public class AssignmentRestController {
 
 	private IAssignmentService assignmentService;
+	private IIntakeService intakeService;
 	
 	@Autowired
-	public AssignmentRestController(IAssignmentService assignmentService) {
+	public AssignmentRestController(IAssignmentService assignmentService, IIntakeService intakeService) {
 		this.assignmentService = assignmentService;
+		this.intakeService=intakeService;
 	}
 	
 	@GetMapping("/assignments")
@@ -48,7 +48,8 @@ public class AssignmentRestController {
 	
 	@PostMapping("/assignments/{lid}")
 	public Assignment addAssignment(@RequestBody Assignment assignment, @PathVariable long lid){
-		//assignment.setAssignDate(new Date());
+
+		intakeService.findById(assignment.getIntake().getId()).addAssignment(assignment);
 		assignmentService.create(assignment, lid);
 		
 		return assignment;
@@ -56,9 +57,8 @@ public class AssignmentRestController {
 	
 	@PutMapping("/assignments")
 	public Assignment updateAssignment(@RequestBody Assignment assignment){
-		
+		intakeService.findById(assignment.getIntake().getId()).addAssignment(assignment);
 		assignmentService.update(assignment);
-		System.out.println(assignment.getTeam());
 		
 		return assignment;
 	}

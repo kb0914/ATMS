@@ -1,11 +1,14 @@
 package com.ykb.ATMS.service.Implementation;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
+import com.ykb.ATMS.DTO.SearchStudentDTO;
 import com.ykb.ATMS.entity.Student;
 import com.ykb.ATMS.repository.StudentRepository;
 import com.ykb.ATMS.service.Interface.IStudentService;
@@ -56,4 +59,21 @@ public class StudentService implements IStudentService {
 		return studentRepository.findByFirstName(name);
 	}
 
+	@Override
+	public List<SearchStudentDTO> getFirstNameAndID(){
+		
+		List<SearchStudentDTO> students = new ArrayList<>();
+		studentRepository.findAll().stream().forEach(i->students.add(new SearchStudentDTO(i.getId(), i.getFirstName())));
+		
+		return students;
+	}
+	
+	@Override
+	public List<SearchStudentDTO> getFirstNameAndIdByIntake(long id){
+		
+		List<SearchStudentDTO> students = new ArrayList<>();
+		studentRepository.findByIntake(id).stream().forEach(i->students.add(new SearchStudentDTO(i.getId(), i.getFirstName())));
+		
+		return students;
+	}
 }

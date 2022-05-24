@@ -13,19 +13,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ykb.ATMS.DTO.SearchStudentDTO;
 import com.ykb.ATMS.entity.Student;
-import com.ykb.ATMS.service.Implementation.StudentService;
+import com.ykb.ATMS.service.Interface.IIntakeService;
+import com.ykb.ATMS.service.Interface.IStudentService;
 
 @RestController
 @RequestMapping("api/")
 @CrossOrigin
 public class StudentRestController {
 
-	private StudentService studentService;
+	private IStudentService studentService;
+	private IIntakeService intakeService;
 	
 	@Autowired
-	public StudentRestController(StudentService studentService) {
+	public StudentRestController(IStudentService studentService, IIntakeService intakeService) {
 		this.studentService = studentService;
+		this.intakeService=intakeService;
 	}
 	
 	@GetMapping("/students")
@@ -43,6 +47,16 @@ public class StudentRestController {
 		return student;
 	}
 	
+	@GetMapping("/students/getfnid")
+	public List<SearchStudentDTO> getFirstNameAndID(){
+		return studentService.getFirstNameAndID();
+	}
+	
+	@GetMapping("/students/getfnid/{id}")
+	public List<SearchStudentDTO> getFirstNameAndIdByIntake(@PathVariable long id){
+		return studentService.getFirstNameAndIdByIntake(id);
+	}
+	
 	@GetMapping("/students/search/{firstName}")
 	public List<Student> findByfirstName(@PathVariable String firstName){
 		
@@ -50,9 +64,9 @@ public class StudentRestController {
 	}
 	
 	@PostMapping("/students")
-	public Student addEmployee(@RequestBody Student student){
-		
+	public Student addStudent(@RequestBody Student student){
 		student.setId(0);
+		intakeService.findById(student.getIntake().getId()).addStudent(student);
 		studentService.save(student);
 		
 		return student;
@@ -60,8 +74,9 @@ public class StudentRestController {
 	
 	
 	@PutMapping("/students")
-	public Student updateEmployee(@RequestBody Student student){
+	public Student updateStudent(@RequestBody Student student){
 		
+		intakeService.findById(student.getIntake().getId()).addStudent(student);
 		studentService.save(student);
 		
 		return student;

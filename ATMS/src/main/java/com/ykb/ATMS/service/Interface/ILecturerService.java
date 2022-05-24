@@ -2,6 +2,7 @@ package com.ykb.ATMS.service.Interface;
 
 import java.util.List;
 
+import com.ykb.ATMS.DTO.SearchLecturerDTO;
 import com.ykb.ATMS.entity.Lecturer;
 
 public interface ILecturerService {
@@ -13,4 +14,6 @@ public interface ILecturerService {
 	public void save(Lecturer lecturer);
 	
 	public void deleteById(long id);
+
+	List<SearchLecturerDTO> findByFirstName(String keyword);
 }

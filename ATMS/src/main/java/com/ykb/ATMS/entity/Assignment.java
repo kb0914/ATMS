@@ -46,9 +46,14 @@ public class Assignment {
 	@JsonIgnore
 	private Lecturer lecturer;
 	
+	@ManyToOne(fetch = FetchType.EAGER,
+			cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+	@JoinColumn(name="intake_id")
+	private Intake intake;
+	
 	@OneToMany(mappedBy="assignment",
 			fetch = FetchType.LAZY,
-			cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+			cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE})
 	@JsonIgnore
 	private List<Team> team;
 
@@ -118,6 +123,14 @@ public class Assignment {
 		this.lecturer = lecturer;
 	}
 	
+	public Intake getIntake() {
+		return intake;
+	}
+
+	public void setIntake(Intake intake) {
+		this.intake = intake;
+	}
+
 	public void addTeam(Team team) {
 		if(this.team == null) {
 			this.team=new ArrayList<>();

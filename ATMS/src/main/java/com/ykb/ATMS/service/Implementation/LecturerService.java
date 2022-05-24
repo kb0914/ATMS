@@ -1,11 +1,14 @@
 package com.ykb.ATMS.service.Implementation;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ykb.ATMS.DTO.SearchLecturerDTO;
+import com.ykb.ATMS.DTO.SearchStudentDTO;
 import com.ykb.ATMS.entity.Lecturer;
 import com.ykb.ATMS.repository.LecturerRepository;
 import com.ykb.ATMS.service.Interface.ILecturerService;
@@ -37,6 +40,15 @@ public class LecturerService implements ILecturerService{
 			throw new RuntimeException("Student ID not found - "+id);
 		
 		return lecturer;
+	}
+	
+	@Override
+	public List<SearchLecturerDTO> findByFirstName(String keyword){
+		
+		List<SearchLecturerDTO> students = new ArrayList<>();
+		lecturerRepository.findByFirstName(keyword).stream().forEach(i->students.add(new SearchLecturerDTO(i.getId(), i.getFirstName())));
+		
+		return students;
 	}
 
 	@Override
