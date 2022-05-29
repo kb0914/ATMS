@@ -1,5 +1,6 @@
 package com.ykb.ATMS.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -13,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -51,6 +53,12 @@ public class Student {
 	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
 	@JoinColumn(name="intake_id")
 	private Intake intake;
+	
+	@OneToMany(mappedBy="student",
+			fetch = FetchType.LAZY,
+			cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+	@JsonIgnore
+	private List<Task> tasks;
 
 	public Student() {
 	}
@@ -116,6 +124,22 @@ public class Student {
 
 	public void setIntake(Intake intake) {
 		this.intake = intake;
+	}
+	
+	public List<Task> getTasks() {
+		return tasks;
+	}
+
+	public void setTasks(List<Task> tasks) {
+		this.tasks = tasks;
+	}
+
+	public void addTask(Task task) {
+		if(this.tasks ==  null) {
+			this.tasks = new ArrayList<>();
+		}
+		
+		this.tasks.add(task);
 	}
 
 	@Override

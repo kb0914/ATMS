@@ -14,7 +14,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="team")
@@ -37,6 +40,12 @@ public class Team {
 			inverseJoinColumns = @JoinColumn(name="student_id")
 			)
 	private List<Student> students;
+	
+	@OneToMany(mappedBy="team",
+			fetch = FetchType.LAZY,
+			cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE})
+	@JsonIgnore
+	private List<Task> tasks;
 
 	public Team() {
 		
@@ -70,12 +79,36 @@ public class Team {
 		this.students = students;
 	}
 	
+	public Assignment getAssignment() {
+		return assignment;
+	}
+
+	public void setAssignment(Assignment assignment) {
+		this.assignment = assignment;
+	}
+
+	public List<Task> getTasks() {
+		return tasks;
+	}
+
+	public void setTasks(List<Task> tasks) {
+		this.tasks = tasks;
+	}
+
 	public void addStudent(Student student) {
 		if(this.students ==  null) {
 			this.students = new ArrayList<>();
 		}
 		
 		this.students.add(student);
+	}
+	
+	public void addTask(Task task) {
+		if(this.tasks ==  null) {
+			this.tasks = new ArrayList<>();
+		}
+		
+		this.tasks.add(task);
 	}
 	
 }

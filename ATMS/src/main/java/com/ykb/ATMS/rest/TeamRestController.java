@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ykb.ATMS.DTO.SearchStudentDTO;
 import com.ykb.ATMS.entity.Assignment;
-import com.ykb.ATMS.entity.Student;
 import com.ykb.ATMS.entity.Team;
 import com.ykb.ATMS.service.Interface.IAssignmentService;
 import com.ykb.ATMS.service.Interface.ITeamService;
@@ -59,16 +59,22 @@ public class TeamRestController {
 		return assignment.getTeam();
 	}
 	
+	@GetMapping("/teams/members/{id}")
+	public List<SearchStudentDTO> findAllTeamMemberByTeamID(@PathVariable long id){
+		
+		return teamService.findAllTeamMemberByTeamID(id);
+	}
+	
 	@GetMapping("/teams/teamedstudent/{id}")
-	public List<Student> findTeamedStudentByAssignemntId(@PathVariable long id){
-		List<Student> students =new ArrayList<>();
+	public List<SearchStudentDTO> findTeamedStudentByAssignemntId(@PathVariable long id){
+		List<SearchStudentDTO> students =new ArrayList<>();
 		Assignment assignment = assignmentService.findById(id);
 		if(assignment==null)
 			throw new RuntimeException("Team id not found - " + id);
 		
 		assignment.getTeam().stream()
 				.map(team->team.getStudents())
-				.forEach(s->s.forEach(i->students.add(i)));
+				.forEach(s->s.forEach(i->students.add(new SearchStudentDTO(i.getId(), i.getFirstName()))));
 		
 		return students;
 	}

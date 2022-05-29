@@ -86,7 +86,7 @@ public class TeamService implements ITeamService{
 		List<Student> students =new ArrayList<>();
 		Assignment assignment = assignmentService.findById(id);
 		if(assignment==null)
-			throw new RuntimeException("Team id not found - " + id);
+			throw new RuntimeException("Assignment id not found - " + id);
 		
 		assignment.getTeam().stream()
 				.map(team->team.getStudents())
@@ -96,6 +96,15 @@ public class TeamService implements ITeamService{
 		students.stream().forEach(i->studentDto.add(new SearchStudentDTO(i.getId(), i.getFirstName())));
 
 		
+		return studentDto;
+	}
+	
+	@Override
+	public List<SearchStudentDTO> findAllTeamMemberByTeamID(long id){
+		
+		List<SearchStudentDTO> studentDto = new ArrayList<>();
+		findById(id).getStudents().stream().forEach(i->studentDto.add(new SearchStudentDTO(i.getId(), i.getFirstName())));
+
 		return studentDto;
 	}
 
