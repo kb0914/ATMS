@@ -1,4 +1,4 @@
-package com.ykb.ATMS.constant;
+package com.ykb.ATMS.enums;
 
 public enum AssignmentStatus {
 	UNASSIGNED,

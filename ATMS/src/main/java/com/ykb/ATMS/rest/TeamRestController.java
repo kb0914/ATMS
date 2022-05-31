@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ykb.ATMS.DTO.SearchStudentDTO;
+import com.ykb.ATMS.DTO.TeamDTO;
+import com.ykb.ATMS.DTO.TeamListDTO;
 import com.ykb.ATMS.entity.Assignment;
 import com.ykb.ATMS.entity.Team;
 import com.ykb.ATMS.service.Interface.IAssignmentService;
@@ -59,39 +61,31 @@ public class TeamRestController {
 		return assignment.getTeam();
 	}
 	
+	@GetMapping("/teams/getTeamListItem/{aid}")
+	public TeamListDTO getTeamListItem(@PathVariable long aid){
+		
+		return teamService.getTeamListItem(aid);
+	}
+	
 	@GetMapping("/teams/members/{id}")
 	public List<SearchStudentDTO> findAllTeamMemberByTeamID(@PathVariable long id){
 		
 		return teamService.findAllTeamMemberByTeamID(id);
 	}
 	
-	@GetMapping("/teams/teamedstudent/{id}")
-	public List<SearchStudentDTO> findTeamedStudentByAssignemntId(@PathVariable long id){
-		List<SearchStudentDTO> students =new ArrayList<>();
-		Assignment assignment = assignmentService.findById(id);
-		if(assignment==null)
-			throw new RuntimeException("Team id not found - " + id);
-		
-		assignment.getTeam().stream()
-				.map(team->team.getStudents())
-				.forEach(s->s.forEach(i->students.add(new SearchStudentDTO(i.getId(), i.getFirstName()))));
-		
-		return students;
-	}
-	
 	@PostMapping("/teams/{aid}")
 	public Team addAssignment(@RequestBody Team team, @PathVariable("aid") long aid){
 		
-		teamService.save(team, aid);
+		teamService.createTeam(team, aid);
 		
 		return team;
 	}
 	
 	
 	@PutMapping("/teams")
-	public Team updateAssignment(@RequestBody Team team){
+	public TeamDTO updateAssignment(@RequestBody TeamDTO team){
 		
-		teamService.save(team, team.getAssingment().getId());
+		teamService.updateTeam(team, team.getAssignment().getId());
 		
 		return team;
 	}

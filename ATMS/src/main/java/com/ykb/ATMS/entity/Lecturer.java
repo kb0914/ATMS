@@ -24,6 +24,9 @@ public class Lecturer {
 	@Column(name="id")
 	private long id;
 	
+	@Column(name="username", nullable = false, unique = true)
+	private String username;
+	
 	@Column(name="first_name")
 	private String firstName;
 	
@@ -45,7 +48,8 @@ public class Lecturer {
 	public Lecturer() {
 	}
 
-	public Lecturer(String firstName, String lastName, String email, String password) {
+	public Lecturer(String username, String firstName, String lastName, String email, String password) {
+		this.username=username;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
@@ -58,6 +62,14 @@ public class Lecturer {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getFirstName() {

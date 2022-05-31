@@ -138,7 +138,7 @@ public class Assignment {
 		
 		this.team.add(team);
 		
-		team.setAssingment(this);
+		team.setAssignment(this);
 	}
 
 	@Override

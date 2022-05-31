@@ -17,6 +17,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.springframework.lang.Nullable;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -27,6 +29,9 @@ public class Student {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	private long id;
+	
+	@Column(name="username", nullable = false, unique = true)
+	private String username;
 	
 	@Column(name="first_name")
 	private String firstName;
@@ -63,7 +68,8 @@ public class Student {
 	public Student() {
 	}
 
-	public Student(String firstName, String lastName, String email, String password, String intake) {
+	public Student(String username, String firstName, String lastName, String email, String password, String intake) {
+		this.username=username;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
@@ -76,6 +82,14 @@ public class Student {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getFirstName() {

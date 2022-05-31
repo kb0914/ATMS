@@ -3,7 +3,7 @@ package com.ykb.ATMS;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-//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
+//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
 @SpringBootApplication
 public class AtmsApplication {
 

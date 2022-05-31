@@ -63,7 +63,10 @@ public class StudentService implements IStudentService {
 	public List<SearchStudentDTO> getFirstNameAndID(){
 		
 		List<SearchStudentDTO> students = new ArrayList<>();
-		studentRepository.findAll().stream().forEach(i->students.add(new SearchStudentDTO(i.getId(), i.getFirstName())));
+		studentRepository.findAll().stream()
+		.forEach(i->students.add(
+				new SearchStudentDTO(i.getId(), i.getUsername(), i.getFirstName(), i.getLastName(), 
+						i.getEmail(), i.getIntake())));
 		
 		return students;
 	}
@@ -72,8 +75,9 @@ public class StudentService implements IStudentService {
 	public List<SearchStudentDTO> getFirstNameAndIdByIntake(long id){
 		
 		List<SearchStudentDTO> students = new ArrayList<>();
-		studentRepository.findByIntake(id).stream().forEach(i->students.add(new SearchStudentDTO(i.getId(), i.getFirstName())));
-		
+		studentRepository.findByIntake(id).stream().forEach(i->students.add(
+				new SearchStudentDTO(i.getId(), i.getUsername(), i.getFirstName(), i.getLastName(), 
+						i.getEmail(), i.getIntake())));
 		return students;
 	}
 }

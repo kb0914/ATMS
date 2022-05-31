@@ -62,15 +62,7 @@ public class Team {
 	public void setId(long id) {
 		this.id = id;
 	}
-
-	public Assignment getAssingment() {
-		return assignment;
-	}
-
-	public void setAssingment(Assignment assingment) {
-		this.assignment = assingment;
-	}
-
+	
 	public List<Student> getStudents() {
 		return students;
 	}

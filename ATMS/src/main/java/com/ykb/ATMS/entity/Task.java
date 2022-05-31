@@ -15,8 +15,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.ykb.ATMS.constant.AssignmentStatus;
-import com.ykb.ATMS.constant.Priority;
+import com.ykb.ATMS.enums.AssignmentStatus;
+import com.ykb.ATMS.enums.Priority;
 
 @Entity
 @Table(name="task")
