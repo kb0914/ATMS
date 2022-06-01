@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ykb.ATMS.DTO.SearchStudentDTO;
+import com.ykb.ATMS.DTO.StudentListDTO;
 import com.ykb.ATMS.entity.Student;
 import com.ykb.ATMS.service.Interface.IIntakeService;
 import com.ykb.ATMS.service.Interface.IStudentService;
@@ -37,6 +39,12 @@ public class StudentRestController {
 		return studentService.findAll();
 	}
 	
+	@GetMapping("/students/list")
+	public StudentListDTO getStudentList(){
+		StudentListDTO dto=studentService.getStudentList();
+		return dto;
+	}
+	
 	@GetMapping("/students/{studentId}")
 	public Student findById(@PathVariable long studentId){
 		
@@ -57,10 +65,10 @@ public class StudentRestController {
 		return studentService.getFirstNameAndIdByIntake(id);
 	}
 	
-	@GetMapping("/students/search/{firstName}")
-	public List<Student> findByfirstName(@PathVariable String firstName){
-		
-		return studentService.findByFirstName(firstName);
+	@GetMapping("/students/search")
+	public List<SearchStudentDTO> searchStudent(@RequestParam(name="username",required = false) String username, 
+			@RequestParam(name="intake",required = false) String intakeName){
+		return studentService.searchStudent(username, intakeName);
 	}
 	
 	@PostMapping("/students")

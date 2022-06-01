@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.ykb.ATMS.DTO.SearchLecturerDTO;
 import com.ykb.ATMS.DTO.SearchStudentDTO;
 import com.ykb.ATMS.entity.Lecturer;
+import com.ykb.ATMS.entity.Student;
 import com.ykb.ATMS.repository.LecturerRepository;
 import com.ykb.ATMS.service.Interface.ILecturerService;
 
@@ -45,10 +46,7 @@ public class LecturerService implements ILecturerService{
 	@Override
 	public List<SearchLecturerDTO> findByFirstName(String keyword){
 		
-		List<SearchLecturerDTO> students = new ArrayList<>();
-		lecturerRepository.findByFirstName(keyword).stream().forEach(i->students.add(new SearchLecturerDTO(i.getId(), i.getFirstName())));
-		
-		return students;
+		return convertLecturerTOSeachDTO(lecturerRepository.findByFirstName(keyword));
 	}
 
 	@Override
@@ -61,4 +59,13 @@ public class LecturerService implements ILecturerService{
 		lecturerRepository.deleteById(id);
 	}
 
+	private List<SearchLecturerDTO> convertLecturerTOSeachDTO(List<Lecturer> students) {
+		List<SearchLecturerDTO> dto = new ArrayList<>();
+		students.stream()
+		.forEach(i->dto.add(
+				new SearchLecturerDTO(i.getId(), i.getUsername(), i.getFirstName(), i.getLastName(), 
+						i.getEmail())));
+		
+		return dto;
+	}
 }

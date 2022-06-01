@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -91,7 +92,7 @@ public class TeamRestController {
 	}
 	
 	@DeleteMapping("/teams/{id}")
-	public Team deleteById(@PathVariable int id){
+	public ResponseEntity deleteById(@PathVariable int id){
 		
 		Team team = teamService.findById(id);
 		
@@ -100,6 +101,6 @@ public class TeamRestController {
 		
 		teamService.deleteById(id);
 		
-		return team;
+		return ResponseEntity.ok().build(); 
 	}
 }
