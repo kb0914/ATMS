@@ -56,15 +56,19 @@ public class Assignment {
 			cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE})
 	@JsonIgnore
 	private List<Team> team;
+	
+	@Column(name="max_team_member")
+	private int maxTeamMember;
 
 	public Assignment() {}
 	
-	public Assignment(String name, String description, Date assignDate, String dueDate, Lecturer lecturer) {
+	public Assignment(String name, String description, Date assignDate, String dueDate, Lecturer lecturer, int maxTeamMember) {
 		this.name = name;
 		this.description = description;
 		this.assignDate = assignDate;
 		this.dueDate = dueDate;
 		this.lecturer = lecturer;
+		this.maxTeamMember=maxTeamMember;
 	}
 
 	public long getId() {
@@ -131,6 +135,14 @@ public class Assignment {
 		this.intake = intake;
 	}
 
+	public int getMaxTeamMember() {
+		return maxTeamMember;
+	}
+
+	public void setMaxTeamMember(int maxTeamMember) {
+		this.maxTeamMember = maxTeamMember;
+	}
+	
 	public void addTeam(Team team) {
 		if(this.team == null) {
 			this.team=new ArrayList<>();

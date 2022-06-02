@@ -64,6 +64,12 @@ public class Student {
 			cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
 	@JsonIgnore
 	private List<Task> tasks;
+	
+	@OneToMany(mappedBy="teamLead",
+			fetch = FetchType.LAZY,
+			cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+	@JsonIgnore
+	private List<Team> manageTeam;
 
 	public Student() {
 	}
@@ -154,6 +160,14 @@ public class Student {
 		}
 		
 		this.tasks.add(task);
+	}
+	
+	public List<Team> getManageTeam() {
+		return manageTeam;
+	}
+
+	public void setManageTeam(List<Team> manageTeam) {
+		this.manageTeam = manageTeam;
 	}
 
 	@Override

@@ -54,7 +54,11 @@ public class TeamService implements ITeamService{
 	@Override
 	public void createTeam(Team team, long aid) {
 		Assignment assignment=assignmentService.findById(aid);
-		assignment.addTeam(team);
+		Student student=studentService.findById(team.getTeamLead().getId());
+		Team tempTeam =new Team();
+		tempTeam.setTeamLead(student);
+		tempTeam.addStudent(student);
+		assignment.addTeam(tempTeam);
 		assignmentService.update(assignment);
 	}
 	
@@ -64,6 +68,7 @@ public class TeamService implements ITeamService{
 		Team team=new Team();
 		team.setId(dto.getId());
 		team.setAssignment(assignment);
+		team.setTeamLead(studentService.findById(dto.getTeamLead().getId()));
 		dto.getStudents().forEach(
 				i->team.addStudent(studentService.findById(i.getId())));
 		assignment.addTeam(team);

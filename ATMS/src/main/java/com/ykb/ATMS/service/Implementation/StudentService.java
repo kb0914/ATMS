@@ -3,11 +3,8 @@ package com.ykb.ATMS.service.Implementation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-
 import com.ykb.ATMS.DTO.SearchStudentDTO;
 import com.ykb.ATMS.DTO.StudentListDTO;
 import com.ykb.ATMS.entity.Student;
@@ -25,7 +22,6 @@ public class StudentService implements IStudentService {
 		this.studentRepository = studentRepository;
 		this.intakeService=intakeService;
 	}
-	
 	@Override
 	public List<Student> findAll() {
 		return studentRepository.findAll();
@@ -62,6 +58,7 @@ public class StudentService implements IStudentService {
 	@Override
 	public void deleteById(long id) {
 		
+		findById(id).getManageTeam().forEach(i->i.setTeamLead(null));
 		studentRepository.deleteById(id);
 	}
 	

@@ -9,6 +9,7 @@ public class TeamDTO {
 	private Assignment assignment;
 	private List<SearchStudentDTO> students;
 	private List<Task> tasks;
+	private SearchStudentDTO teamLead;
 	
 	public TeamDTO(long id, Assignment assignment, List<SearchStudentDTO> students, List<Task> tasks) {
 		super();
@@ -48,6 +49,14 @@ public class TeamDTO {
 
 	public void setTasks(List<Task> tasks) {
 		this.tasks = tasks;
+	}
+
+	public SearchStudentDTO getTeamLead() {
+		return teamLead;
+	}
+
+	public void setTeamLead(SearchStudentDTO teamLead) {
+		this.teamLead = teamLead;
 	}
 	
 	

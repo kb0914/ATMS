@@ -46,6 +46,10 @@ public class Team {
 			cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE})
 	@JsonIgnore
 	private List<Task> tasks;
+	
+	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+	@JoinColumn(name="team_lead_id")
+	private Student teamLead;
 
 	public Team() {
 		
@@ -85,6 +89,14 @@ public class Team {
 
 	public void setTasks(List<Task> tasks) {
 		this.tasks = tasks;
+	}
+
+	public Student getTeamLead() {
+		return teamLead;
+	}
+
+	public void setTeamLead(Student teamLead) {
+		this.teamLead = teamLead;
 	}
 
 	public void addStudent(Student student) {
