@@ -50,6 +50,12 @@ public class Team {
 	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
 	@JoinColumn(name="team_lead_id")
 	private Student teamLead;
+	
+	@OneToMany(mappedBy="team",
+			fetch = FetchType.LAZY,
+			cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE})
+	@JsonIgnore
+	private List<FileDB> files;
 
 	public Team() {
 		
@@ -99,12 +105,28 @@ public class Team {
 		this.teamLead = teamLead;
 	}
 
+	public List<FileDB> getFiles() {
+		return files;
+	}
+
+	public void setFiles(List<FileDB> files) {
+		this.files = files;
+	}
+
 	public void addStudent(Student student) {
 		if(this.students ==  null) {
 			this.students = new ArrayList<>();
 		}
 		
 		this.students.add(student);
+	}
+	
+	public void addFile(FileDB file) {
+		if(this.files ==  null) {
+			this.files = new ArrayList<>();
+		}
+		
+		this.files.add(file);
 	}
 	
 	public void addTask(Task task) {

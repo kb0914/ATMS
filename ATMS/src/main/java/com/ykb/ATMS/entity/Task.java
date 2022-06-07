@@ -55,6 +55,10 @@ public class Task {
 	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
 	@JoinColumn(name="student_id")
 	private Student student;
+	
+	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
+	@JoinColumn(name="prove_file_id")
+	private FileDB file;
 
 	public Task() {
 	}
@@ -149,6 +153,14 @@ public class Task {
 
 	public void setStudent(Student student) {
 		this.student = student;
+	}
+
+	public FileDB getFile() {
+		return file;
+	}
+
+	public void setFile(FileDB file) {
+		this.file = file;
 	}
 
 	@Override

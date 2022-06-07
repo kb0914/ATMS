@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ykb.ATMS.DTO.LinkTaskDTO;
 import com.ykb.ATMS.entity.Task;
 import com.ykb.ATMS.entity.Team;
 import com.ykb.ATMS.enums.Priority;
@@ -49,6 +50,17 @@ public class TaskRestController {
 	@GetMapping("/tasks/team/{id}")
 	public List<Task> findByTeamId(@PathVariable long id){
 		return taskService.findByTeam(id);
+	}
+	
+	@GetMapping("/tasks/{sid}/{tid}")
+	public LinkTaskDTO getTasksByStudentAdnTeamID(@PathVariable long sid, @PathVariable long tid){
+		LinkTaskDTO dto = new LinkTaskDTO();
+		List<Task> tasks=taskService.getTasksByStudentAdnTeamID(sid, tid);
+		dto.setAllTask(tasks);
+		dto.setLinkedTask(tasks.stream()
+				.filter(i->i.getFile()!= null)
+				.toList());
+		return dto;
 	}
 	
 	@PostMapping("/tasks")

@@ -11,4 +11,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 	
 	@Query("Select t from Task t where t.team.id=:id")
 	public List<Task> findByTeam(long id);
+	
+	@Query("Select t from Task t where t.student.id=:sid and t.team.id=:tid")
+	public List<Task> findByStudentAndTeam(long sid, long tid);
 }

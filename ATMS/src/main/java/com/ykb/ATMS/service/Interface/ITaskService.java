@@ -18,4 +18,6 @@ public interface ITaskService {
 
 	List<Task> findByTeam(long id);
 
+	List<Task> getTasksByStudentAdnTeamID(long sid, long tid);
+
 }

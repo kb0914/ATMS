@@ -85,4 +85,9 @@ public class TaskService implements ITaskService{
 	public void update(Task assignment) {
 		taskRepository.save(assignment);
 	}
+	
+	@Override
+	public List<Task> getTasksByStudentAdnTeamID(long sid, long tid){
+		return taskRepository.findByStudentAndTeam(sid, tid);
+	}
 }

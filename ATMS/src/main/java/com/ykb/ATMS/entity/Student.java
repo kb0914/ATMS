@@ -17,8 +17,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.springframework.lang.Nullable;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -70,6 +68,12 @@ public class Student {
 			cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
 	@JsonIgnore
 	private List<Team> manageTeam;
+	
+	@OneToMany(mappedBy="student",
+			fetch = FetchType.LAZY,
+			cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+	@JsonIgnore
+	private List<FileDB> files;
 
 	public Student() {
 	}
@@ -152,6 +156,14 @@ public class Student {
 
 	public void setTasks(List<Task> tasks) {
 		this.tasks = tasks;
+	}
+
+	public List<FileDB> getFiles() {
+		return files;
+	}
+
+	public void setFiles(List<FileDB> files) {
+		this.files = files;
 	}
 
 	public void addTask(Task task) {
