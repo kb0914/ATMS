@@ -2,6 +2,7 @@ package com.ykb.ATMS.service.Interface;
 
 import java.util.List;
 
+import com.ykb.ATMS.DTO.TaskUpdateDTO;
 import com.ykb.ATMS.entity.Task;
 
 public interface ITaskService {

@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,6 +38,20 @@ public class FileRestController {
 		this.fileDBService=fileDBService;
 	}
 	
+	@GetMapping("/files")
+	public ResponseEntity<List<FileRespondDTO>> getListFiles() {
+	    		
+	    return ResponseEntity.status(HttpStatus.OK).body(fileDBService.getFileList());
+	}
+	
+	@GetMapping("/files/{id}")
+	public ResponseEntity<byte[]> getFile(@PathVariable long id) {
+	    FileDB fileDB = fileDBService.getFile(id);
+	    return ResponseEntity.ok()
+	        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDB.getName() + "\"")
+	        .body(fileDB.getData());
+	}
+	
 	@PostMapping("/upload/{tid}/{sid}")
 	public ResponseEntity<FileRespondMessage> uploadFile(@RequestParam("file") MultipartFile file,
 			@PathVariable long sid, @PathVariable long tid) {
@@ -59,36 +74,13 @@ public class FileRestController {
 	
 	@PutMapping("/files/removetask/{id}")
 	public void linkTaskToFile(@RequestBody Task task, @PathVariable long id) {
+		System.out.println("unlink");
 		fileDBService.unlinkTaskToFile(id, task);
 		
 	}
 	
-	@GetMapping("/files")
-	public ResponseEntity<List<FileRespondDTO>> getListFiles() {
-	    List<FileRespondDTO> files = fileDBService.getAllFiles().stream()
-	    		.map(dbFile -> {
-	    		     String fileDownloadUri = ServletUriComponentsBuilder
-	    		    		 .fromCurrentContextPath()
-	    		    		 .path("/api/files/")
-	    		    		 .path(Long.toString(dbFile.getId()))
-	    		    		 .toUriString();
-	    		     
-	    		     return new FileRespondDTO(
-	    		    		 dbFile.getId(),
-	    		             dbFile.getName(),
-	    		             fileDownloadUri,
-	    		             dbFile.getType(),
-	    		             dbFile.getData().length);
-	    			}).collect(Collectors.toList());
-	    		
-	    return ResponseEntity.status(HttpStatus.OK).body(files);
-	}
-	
-	@GetMapping("/files/{id}")
-	public ResponseEntity<byte[]> getFile(@PathVariable long id) {
-	    FileDB fileDB = fileDBService.getFile(id);
-	    return ResponseEntity.ok()
-	        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDB.getName() + "\"")
-	        .body(fileDB.getData());
+	@DeleteMapping("/files/{id}")
+	public void deleteFile(@PathVariable long id) {
+	    fileDBService.deleteFile(id);
 	}
 }

@@ -23,4 +23,6 @@ public interface IStudentService {
 	List<SearchStudentDTO> getFirstNameAndIdByIntake(long id);
 
 	StudentListDTO getStudentList();
+
+	SearchStudentDTO getSearchStudentByI(long id);
 }

@@ -34,6 +34,14 @@ public class StudentService implements IStudentService {
 		dto.setIntakes(intakeService.findAll());
 		return dto;
 	}
+	
+	@Override
+	public SearchStudentDTO getSearchStudentByI(long id){
+		Student student =findById(id);
+		return new SearchStudentDTO(student.getId(), student.getUsername(), 
+				student.getFirstName(), student.getLastName(), 
+				student.getEmail(), student.getIntake());
+	}
 
 	@Override
 	public Student findById(long id) {

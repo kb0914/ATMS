@@ -16,12 +16,13 @@ public class FileRespondDTO {
 	
 	private Date uploadedDate;
 	  
-	public FileRespondDTO(long id, String name, String url, String type, long size) {
+	public FileRespondDTO(long id, String name, String url, String type, long size, Date uploadedDate) {
 		this.id=id;
 	    this.name = name;
 	    this.url = url;
 	    this.type = type;
 	    this.size = size;
+	    this.uploadedDate=uploadedDate;
 	  }
 	
 	public long getId() {

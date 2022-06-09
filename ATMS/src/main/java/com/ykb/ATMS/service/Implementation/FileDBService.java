@@ -5,17 +5,21 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.ykb.ATMS.DTO.FileReceiveDTO;
+import com.ykb.ATMS.DTO.FileRespondDTO;
 import com.ykb.ATMS.entity.FileDB;
 import com.ykb.ATMS.entity.Student;
 import com.ykb.ATMS.entity.Task;
 import com.ykb.ATMS.entity.Team;
+import com.ykb.ATMS.enums.AssignmentStatus;
 import com.ykb.ATMS.repository.FileDBRepository;
 import com.ykb.ATMS.service.Interface.IFileDBService;
 import com.ykb.ATMS.service.Interface.IStudentService;
@@ -51,13 +55,20 @@ public class FileDBService implements IFileDBService{
 	@Override
 	public void linkTaskToFile(long id, List<Task> tasks) {
 		FileDB file=getFile(id);
-		tasks.forEach(i->file.addTask(taskService.findById(i.getId())));
+		tasks.forEach(i->{
+			Task task=taskService.findById(i.getId());
+			task.setStatus(AssignmentStatus.COMPLETED);
+			file.addTask(task);
+		});
+		
 		fileDBRepository.save(file);
 	}
 	
 	@Override
 	public void unlinkTaskToFile(long id, Task task) {
 		FileDB file=getFile(id);
+		Task temp=taskService.findById(task.getId());
+		temp.setStatus(AssignmentStatus.STARTED);
 		file.removeTask(taskService.findById(task.getId()));
 		fileDBRepository.save(file);
 	}
@@ -71,7 +82,7 @@ public class FileDBService implements IFileDBService{
 			if(result!=null)
 				fileDb=result.get();
 			else
-				throw new RuntimeException("Student ID not found - "+id);
+				throw new RuntimeException("File ID not found - "+id);
 			
 	    return fileDb;
 	  }
@@ -80,4 +91,42 @@ public class FileDBService implements IFileDBService{
 	  public List<FileDB> getAllFiles() {
 	    return fileDBRepository.findAll();
 	  }
+	
+	@Override
+	public List<FileRespondDTO> getFileList() {
+		return getAllFiles().stream()
+	    		.map(dbFile -> convertFileToFileRespond(dbFile)).collect(Collectors.toList());
+	}
+	
+	@Override
+	public FileRespondDTO getTaskProveFile(long id) {
+		
+		return convertFileToFileRespond(getFile(id));
+	}
+	
+	@Override
+	public void deleteFile(long id) {
+		getFile(id).getTasks().forEach(i->{
+			i.setFile(null);
+			i.setStatus(AssignmentStatus.STARTED);
+			});
+	    fileDBRepository.deleteById(id);
+	}
+	
+	private FileRespondDTO convertFileToFileRespond(FileDB file) {
+		String fileDownloadUri = ServletUriComponentsBuilder
+	    		 .fromCurrentContextPath()
+	    		 .path("/api/files/")
+	    		 .path(Long.toString(file.getId()))
+	    		 .toUriString();
+		
+		return new FileRespondDTO(
+				file.getId(),
+				file.getName(),
+	            fileDownloadUri,
+	            file.getType(),
+	            file.getData().length,
+	            file.getDate());
+	}
+	
 }
