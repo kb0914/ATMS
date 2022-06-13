@@ -46,7 +46,7 @@ public class Task {
 	private AssignmentStatus status;
 	
 	@Column(name="weightage")
-	private float weightage;
+	private int weightage;
 	
 	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
 	@JoinColumn(name="team_id")
@@ -64,7 +64,7 @@ public class Task {
 	}
 
 	public Task(String tittle, String description, Date assignDate, Date estimatedDueDate, Priority priority,
-			AssignmentStatus status, float weightage, Team team) {
+			AssignmentStatus status, int weightage, Team team) {
 		this.tittle=tittle;
 		this.description = description;
 		this.assignDate = assignDate;
@@ -131,11 +131,11 @@ public class Task {
 		this.status = status;
 	}
 
-	public float getWeightage() {
+	public int getWeightage() {
 		return weightage;
 	}
 
-	public void setWeightage(float weightage) {
+	public void setWeightage(int weightage) {
 		this.weightage = weightage;
 	}
 

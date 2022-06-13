@@ -41,6 +41,7 @@ public class Student {
 	private String email;
 	
 	@Column(name="password")
+	@JsonIgnore
 	private String password;
 	
 	@ManyToMany(fetch = FetchType.LAZY, 
@@ -172,6 +173,7 @@ public class Student {
 		}
 		
 		this.tasks.add(task);
+		task.setStudent(this);
 	}
 	
 	public List<Team> getManageTeam() {

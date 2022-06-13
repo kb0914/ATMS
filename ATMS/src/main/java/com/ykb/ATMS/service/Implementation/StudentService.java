@@ -3,11 +3,14 @@ package com.ykb.ATMS.service.Implementation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ykb.ATMS.DTO.SearchStudentDTO;
 import com.ykb.ATMS.DTO.StudentListDTO;
 import com.ykb.ATMS.entity.Student;
+import com.ykb.ATMS.entity.Team;
 import com.ykb.ATMS.repository.StudentRepository;
 import com.ykb.ATMS.service.Interface.IStudentService;
 
@@ -16,12 +19,15 @@ public class StudentService implements IStudentService {
 
 	private StudentRepository studentRepository;
 	private IntakeService intakeService;
+	private ModelMapper modelMapper;
 	
 	@Autowired
-	public StudentService(StudentRepository studentRepository, IntakeService intakeService) {
+	public StudentService(StudentRepository studentRepository, IntakeService intakeService, ModelMapper modelMapper) {
 		this.studentRepository = studentRepository;
 		this.intakeService=intakeService;
+		this.modelMapper=modelMapper;
 	}
+	
 	@Override
 	public List<Student> findAll() {
 		return studentRepository.findAll();
@@ -101,13 +107,22 @@ public class StudentService implements IStudentService {
 		return students;
 	}
 	
+	@Override
+	public List<Team> getTeamById(long id){
+		return findById(id).getTeams();
+	}
+	
 	private List<SearchStudentDTO> SearconvertStudentTOSeachDTO(List<Student> students) {
 		List<SearchStudentDTO> dto = new ArrayList<>();
-		students.stream()
-		.forEach(i->dto.add(
-				new SearchStudentDTO(i.getId(), i.getUsername(), i.getFirstName(), i.getLastName(), 
-						i.getEmail(), i.getIntake())));
+		students.stream().forEach(i->dto.add(convertToDto(i)));
 		
 		return dto;
+	}
+	
+	private SearchStudentDTO convertToDto(Student post) {
+		
+		SearchStudentDTO postDto = modelMapper.map(post, SearchStudentDTO.class);
+		
+	    return postDto;
 	}
 }

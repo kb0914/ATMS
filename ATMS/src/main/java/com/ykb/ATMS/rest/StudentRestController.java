@@ -2,6 +2,7 @@ package com.ykb.ATMS.rest;
 
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ykb.ATMS.DTO.SearchStudentDTO;
+import com.ykb.ATMS.DTO.StudentInfoDTO;
 import com.ykb.ATMS.DTO.StudentListDTO;
 import com.ykb.ATMS.entity.Student;
+import com.ykb.ATMS.entity.Team;
 import com.ykb.ATMS.service.Interface.IIntakeService;
 import com.ykb.ATMS.service.Interface.IStudentService;
 
@@ -27,11 +30,13 @@ public class StudentRestController {
 
 	private IStudentService studentService;
 	private IIntakeService intakeService;
+	private ModelMapper modelMapper;
 	
 	@Autowired
-	public StudentRestController(IStudentService studentService, IIntakeService intakeService) {
+	public StudentRestController(IStudentService studentService, IIntakeService intakeService, ModelMapper modelMapper) {
 		this.studentService = studentService;
 		this.intakeService=intakeService;
+		this.modelMapper=modelMapper;
 	}
 	
 	@GetMapping("/students")
@@ -46,13 +51,11 @@ public class StudentRestController {
 	}
 	
 	@GetMapping("/students/{studentId}")
-	public Student findById(@PathVariable long studentId){
+	public StudentInfoDTO findById(@PathVariable long studentId){
 		
 		Student student = studentService.findById(studentId);
-		if(student==null)
-			throw new RuntimeException("Student id not found - " + studentId);
 		
-		return student;
+		return modelMapper.map(student, StudentInfoDTO.class);
 	}
 	
 	@GetMapping("/students/getfnid")
@@ -71,6 +74,11 @@ public class StudentRestController {
 		return studentService.searchStudent(username, intakeName);
 	}
 	
+	@GetMapping("/students/getteams/{id}")
+	public List<Team> getTeamsById(@PathVariable long id){
+		return studentService.getTeamById(id);
+	}
+	
 	@PostMapping("/students")
 	public Student addStudent(@RequestBody Student student){
 		student.setId(0);
@@ -79,7 +87,6 @@ public class StudentRestController {
 		
 		return student;
 	}
-	
 	
 	@PutMapping("/students")
 	public Student updateStudent(@RequestBody Student student){

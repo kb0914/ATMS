@@ -3,6 +3,8 @@ package com.ykb.ATMS.rest;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,11 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ykb.ATMS.DTO.DistributeTasksDTO;
 import com.ykb.ATMS.DTO.LinkTaskDTO;
 import com.ykb.ATMS.DTO.TaskUpdateDTO;
 import com.ykb.ATMS.entity.Task;
-import com.ykb.ATMS.entity.Team;
-import com.ykb.ATMS.enums.Priority;
 import com.ykb.ATMS.service.Interface.IFileDBService;
 import com.ykb.ATMS.service.Interface.IStudentService;
 import com.ykb.ATMS.service.Interface.ITaskService;
@@ -97,11 +98,24 @@ public class TaskRestController {
 		return task;
 	}
 	
+	@PostMapping("/tasks/getdistributedtasks/{tid}")
+	public DistributeTasksDTO distributeTask(@PathVariable long tid, @RequestBody List<Task> task){
+		
+		return taskService.distributeTasks(tid, task);
+	}
+	
 	@PutMapping("/tasks")
 	public Task updateTask(@RequestBody Task task){
 		taskService.update(task);
 		
 		return task;
+	}
+	
+	@PutMapping("/tasks/updateAssignTo")
+	public ResponseEntity<String> updateAssignTo(@RequestBody List<Task> task){
+		taskService.updateAssignTo(task);
+		
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/tasks/{id}")

@@ -2,7 +2,9 @@ package com.ykb.ATMS.service.Interface;
 
 import java.util.List;
 
+import com.ykb.ATMS.DTO.DistributeTasksDTO;
 import com.ykb.ATMS.DTO.TaskUpdateDTO;
+import com.ykb.ATMS.entity.Student;
 import com.ykb.ATMS.entity.Task;
 
 public interface ITaskService {
@@ -20,5 +22,9 @@ public interface ITaskService {
 	List<Task> findByTeam(long id);
 
 	List<Task> getTasksByStudentAdnTeamID(long sid, long tid);
+
+	DistributeTasksDTO distributeTasks(long teamId, List<Task> tasks);
+
+	void updateAssignTo(List<Task> tasks);
 
 }
