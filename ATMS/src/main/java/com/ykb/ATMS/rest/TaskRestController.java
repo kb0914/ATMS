@@ -118,6 +118,13 @@ public class TaskRestController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
+	@PutMapping("/tasks/updateAssignToWithID/{sid}")
+	public ResponseEntity<String> updateAssignToWithStudentId( @PathVariable long sid, @RequestBody List<Task> task){
+		taskService.updateAssignTo(task, sid);
+		
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
 	@DeleteMapping("/tasks/{id}")
 	public Task deleteById(@PathVariable int id){
 		

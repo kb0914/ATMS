@@ -27,4 +27,6 @@ public interface ITaskService {
 
 	void updateAssignTo(List<Task> tasks);
 
+	void updateAssignTo(List<Task> tasks, long sid);
+
 }

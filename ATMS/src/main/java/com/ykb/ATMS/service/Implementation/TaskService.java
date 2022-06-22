@@ -106,6 +106,17 @@ public class TaskService implements ITaskService{
 	}
 	
 	@Override
+	public void updateAssignTo(List<Task> tasks, long sid) {
+		Student s=studentService.findById(sid);
+		tasks.forEach(i->{
+			Task t=findById(i.getId());
+			t.setStatus(AssignmentStatus.PENDING);
+			s.addTask(t);
+			studentService.save(s);
+		});
+	}
+	
+	@Override
 	public List<Task> getTasksByStudentAdnTeamID(long sid, long tid){
 		return taskRepository.findByStudentAndTeam(sid, tid);
 	}
