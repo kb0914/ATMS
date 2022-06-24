@@ -6,8 +6,10 @@ import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.ykb.ATMS.DTO.SearchStudentDTO;
+import com.ykb.ATMS.DTO.StudentInfoDTO;
 import com.ykb.ATMS.DTO.StudentListDTO;
 import com.ykb.ATMS.entity.Student;
 import com.ykb.ATMS.entity.Team;
@@ -20,12 +22,14 @@ public class StudentService implements IStudentService {
 	private StudentRepository studentRepository;
 	private IntakeService intakeService;
 	private ModelMapper modelMapper;
+	private PasswordEncoder bcryptEncoder;
 	
 	@Autowired
-	public StudentService(StudentRepository studentRepository, IntakeService intakeService, ModelMapper modelMapper) {
+	public StudentService(StudentRepository studentRepository, IntakeService intakeService, ModelMapper modelMapper, PasswordEncoder bcryptEncoder) {
 		this.studentRepository = studentRepository;
 		this.intakeService=intakeService;
 		this.modelMapper=modelMapper;
+		this.bcryptEncoder=bcryptEncoder;
 	}
 	
 	@Override
@@ -55,14 +59,45 @@ public class StudentService implements IStudentService {
 		
 		Student student=null;
 		
-		if(result!=null)
+		if(result!=null) {
 			student=result.get();
+		}
 		else
 			throw new RuntimeException("Student ID not found - "+id);
 		
 		return student;
 	}
+	
+	@Override
+	public Student findByUsername(String username) {
+		return studentRepository.findByUsername(username);
+	}
+	
+	@Override
+	public Student create(StudentInfoDTO dto) {
+		Student student=findById(dto.getId());
+		student.setId(0);
+		intakeService.findById(student.getIntake().getId()).addStudent(student);
+		student.setFirstName(dto.getFirstName());
+		student.setLastName(dto.getLastName());
+		student.setEmail(dto.getEmail());
+		student.setPassword(bcryptEncoder.encode(dto.getPassword()));
+		
+		return studentRepository.save(student);
+	}
 
+	@Override
+	public Student update(StudentInfoDTO dto) {
+		Student student=findById(dto.getId());
+		student.setFirstName(dto.getFirstName());
+		student.setLastName(dto.getLastName());
+		student.setEmail(dto.getEmail());
+		student.setIntake(dto.getIntake());
+		student.setPassword(bcryptEncoder.encode(dto.getPassword()));
+		
+		return studentRepository.save(student);
+	}
+	
 	@Override
 	public void save(Student student) {
 

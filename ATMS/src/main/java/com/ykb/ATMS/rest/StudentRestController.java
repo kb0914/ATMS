@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -80,21 +81,15 @@ public class StudentRestController {
 	}
 	
 	@PostMapping("/students")
-	public Student addStudent(@RequestBody Student student){
-		student.setId(0);
-		intakeService.findById(student.getIntake().getId()).addStudent(student);
-		studentService.save(student);
+	public ResponseEntity<?>  addStudent(@RequestBody StudentInfoDTO student){
 		
-		return student;
+		return ResponseEntity.ok(studentService.create(student));
 	}
 	
 	@PutMapping("/students")
-	public Student updateStudent(@RequestBody Student student){
+	public ResponseEntity<?> updateStudent(@RequestBody StudentInfoDTO studentDto){
 		
-		intakeService.findById(student.getIntake().getId()).addStudent(student);
-		studentService.save(student);
-		
-		return student;
+		return ResponseEntity.ok(studentService.update(studentDto));
 	}
 	
 	@DeleteMapping("/students/{studentId}")

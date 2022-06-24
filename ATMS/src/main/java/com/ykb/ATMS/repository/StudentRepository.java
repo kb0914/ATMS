@@ -14,4 +14,7 @@ public interface StudentRepository extends JpaRepository<Student, Long>{
 	
 	@Query("Select s from Student s where s.intake.id=:id")
 	public List<Student> findByIntake(long id);
+	
+	@Query("Select s from Student s where s.username=:username")
+	public Student findByUsername(String username);
 }

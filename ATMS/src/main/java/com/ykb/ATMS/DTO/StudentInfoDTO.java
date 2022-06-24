@@ -7,6 +7,8 @@ public class StudentInfoDTO {
 	private long id;
 	private String username;
 	
+	private String role;
+	
 	private String firstName;
 	
 	private String lastName;
@@ -18,6 +20,12 @@ public class StudentInfoDTO {
 	private Intake intake;
 
 	public StudentInfoDTO() {
+	}
+	
+	public StudentInfoDTO(long id, String username, String role) {
+		this.id = id;
+		this.username = username;
+		this.role=role;
 	}
 
 	public StudentInfoDTO(long id, String username, String firstName, String lastName, String email, Intake intake,
@@ -85,5 +93,13 @@ public class StudentInfoDTO {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 }
