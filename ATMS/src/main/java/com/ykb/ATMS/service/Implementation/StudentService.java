@@ -75,9 +75,10 @@ public class StudentService implements IStudentService {
 	
 	@Override
 	public Student create(StudentInfoDTO dto) {
-		Student student=findById(dto.getId());
+		Student student=new Student();
 		student.setId(0);
-		intakeService.findById(student.getIntake().getId()).addStudent(student);
+		student.setUsername(dto.getUsername());
+		intakeService.findById(dto.getIntake().getId()).addStudent(student);
 		student.setFirstName(dto.getFirstName());
 		student.setLastName(dto.getLastName());
 		student.setEmail(dto.getEmail());

@@ -40,8 +40,8 @@ public class JwtAuthenticationRestController {
 	public ResponseEntity<?> generateAuthenticationToken(@RequestBody AuthRequestDTO authenticationRequest)
 			throws Exception {
 		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
-
-		final CustomUserDetails userDetails = userDetailsService
+		CustomUserDetails userDetails=new CustomUserDetails();
+		userDetails = userDetailsService
 				.loadUserByUsername(authenticationRequest.getUsername());
 		
 		final String token = jwtTokenUtil.generateToken(userDetails);

@@ -22,6 +22,8 @@ public class CustomUserDetails implements UserDetails{
 	private Boolean accountNonLocked;
 
 	private boolean credentialsNonExpired;
+	
+	public CustomUserDetails() {}
 
 	public CustomUserDetails(long id, String username, String password,Collection<? extends GrantedAuthority> authorities) {
 	    this.id = id;

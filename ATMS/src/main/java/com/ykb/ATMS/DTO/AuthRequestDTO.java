@@ -8,15 +8,17 @@ public class AuthRequestDTO implements Serializable{
 
 	private String username;
 	private String password;
+	private String role;
 
 	//default constructor for JSON Parsing
 	public AuthRequestDTO()
 	{
 	}
 
-	public AuthRequestDTO(String username, String password) {
-		this.setUsername(username);
-		this.setPassword(password);
+	public AuthRequestDTO(String username, String password, String role) {
+		this.username=username;
+		this.password=password;
+		this.role=role;
 	}
 
 	public String getUsername() {
@@ -33,5 +35,18 @@ public class AuthRequestDTO implements Serializable{
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	@Override
+	public String toString() {
+		return "AuthRequestDTO [username=" + username + ", password=" + password + ", role=" + role + "]";
 	}
 }

@@ -3,6 +3,7 @@ package com.ykb.ATMS.rest;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ykb.ATMS.DTO.LecturerInfoDTO;
 import com.ykb.ATMS.DTO.SearchLecturerDTO;
 import com.ykb.ATMS.entity.Intake;
 import com.ykb.ATMS.entity.Lecturer;
@@ -52,21 +54,16 @@ public class LecturerRestController {
 	}
 	
 	@PostMapping("/lecturers")
-	public Lecturer addLecturer(@RequestBody Lecturer lecturer){
+	public ResponseEntity<?> addLecturer(@RequestBody LecturerInfoDTO lecturer){
 		
-		lecturer.setId(0);
-		lecturerService.save(lecturer);
-		
-		return lecturer;
+		return ResponseEntity.ok(lecturerService.create(lecturer));
 	}
 	
 	
 	@PutMapping("/lecturers")
-	public Lecturer updateLecturer(@RequestBody Lecturer lecturer){
-		
-		lecturerService.save(lecturer);
-		
-		return lecturer;
+	public ResponseEntity<?> updateLecturer(@RequestBody LecturerInfoDTO lecturer){
+		System.out.println(lecturer.getPassword());
+		return ResponseEntity.ok(lecturerService.update(lecturer));
 	}
 	
 	@DeleteMapping("/lecturers/{id}")
