@@ -28,4 +28,6 @@ public interface ITeamService {
 	TeamListDTO getTeamListItem(long id);
 
 	void updateTeam(TeamDTO team, long aid);
+
+	TeamDTO getDTOById(long id);
 }

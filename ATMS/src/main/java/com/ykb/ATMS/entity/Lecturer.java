@@ -17,15 +17,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="lecturer")
-public class Lecturer {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
-	private long id;
-	
-	@Column(name="username", nullable = false, unique = true)
-	private String username;
+public class Lecturer extends User{
 	
 	@Column(name="first_name")
 	private String firstName;
@@ -35,9 +27,6 @@ public class Lecturer {
 	
 	@Column(name="email")
 	private String email;
-	
-	@Column(name="password")
-	private String password;
 
 	@OneToMany(mappedBy="lecturer",
 			fetch = FetchType.LAZY,
@@ -49,19 +38,19 @@ public class Lecturer {
 	}
 
 	public Lecturer(String username, String firstName, String lastName, String email, String password) {
-		this.username=username;
+		super.username=username;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
-		this.password = password;
+		super.password = password;
 	}
 
 	public long getId() {
-		return id;
+		return super.id;
 	}
 
 	public void setId(long id) {
-		this.id = id;
+		super.id = id;
 	}
 
 	public String getUsername() {

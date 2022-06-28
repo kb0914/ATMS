@@ -1,7 +1,9 @@
 package com.ykb.ATMS.entity;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -31,15 +33,12 @@ public class Team {
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
 	@JoinColumn(name="assingment_id")
 	private Assignment assignment;
-	
-	@ManyToMany(fetch = FetchType.LAZY, 
-			cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
-	@JoinTable(
-			name="team_student",
-			joinColumns = @JoinColumn(name="team_id"),
-			inverseJoinColumns = @JoinColumn(name="student_id")
-			)
-	private List<Student> students;
+	@OneToMany(
+		fetch = FetchType.LAZY, 
+        mappedBy = "team",
+        cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}
+    )
+    private List<TeamStudent> students;
 	
 	@OneToMany(mappedBy="team",
 			fetch = FetchType.LAZY,
@@ -73,11 +72,11 @@ public class Team {
 		this.id = id;
 	}
 	
-	public List<Student> getStudents() {
+	public List<TeamStudent> getStudents() {
 		return students;
 	}
 
-	public void setStudents(List<Student> students) {
+	public void setStudents(List<TeamStudent> students) {
 		this.students = students;
 	}
 	
@@ -117,9 +116,37 @@ public class Team {
 		if(this.students ==  null) {
 			this.students = new ArrayList<>();
 		}
-		
-		this.students.add(student);
+		TeamStudent ts=new TeamStudent(this, student);
+		System.out.println(this+":"+student);
+		this.students.add(ts);
+		student.getTeams().add(ts);
 	}
+	
+	public void removeStudent(Student student) {
+        for (Iterator<TeamStudent> iterator = students.iterator();
+             iterator.hasNext(); ) {
+        	TeamStudent ts = iterator.next();
+ 
+            if (ts.getTeam().equals(this) &&
+                    ts.getStudent().equals(student)) {
+                iterator.remove();
+                ts.getStudent().getTeams().remove(ts);
+                ts.setStudent(student);
+                ts.setTeam(null);
+            }
+        }
+    }
+	
+	public void removeAllStudent() {
+		int sLength=students.size();
+        for(int i=0; i<sLength;i++) {
+        	TeamStudent ts=students.get(sLength);
+        	students.remove(ts);
+        	ts.getStudent().getTeams().remove(ts);
+            //ts.setStudent(student);
+            ts.setTeam(null);
+        }
+    }
 	
 	public void addFile(FileDB file) {
 		if(this.files ==  null) {
@@ -137,4 +164,19 @@ public class Team {
 		this.tasks.add(task);
 	}
 	
+//	@Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+// 
+//        if (o == null || getClass() != o.getClass())
+//            return false;
+// 
+//        Team team = (Team) o;
+//        return Objects.equals(id, team.id);
+//    }
+// 
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(id);
+//    }
 }

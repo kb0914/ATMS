@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ykb.ATMS.DTO.SearchStudentDTO;
 import com.ykb.ATMS.DTO.StudentInfoDTO;
 import com.ykb.ATMS.DTO.StudentListDTO;
+import com.ykb.ATMS.DTO.TeamDTO;
 import com.ykb.ATMS.entity.Student;
 import com.ykb.ATMS.entity.Team;
 import com.ykb.ATMS.service.Interface.IIntakeService;
@@ -76,7 +77,7 @@ public class StudentRestController {
 	}
 	
 	@GetMapping("/students/getteams/{id}")
-	public List<Team> getTeamsById(@PathVariable long id){
+	public List<TeamDTO> getTeamsById(@PathVariable long id){
 		return studentService.getTeamById(id);
 	}
 	

@@ -85,10 +85,16 @@ public class TaskRestController {
 					t.getWeightage(),studentService.getSearchStudentByI(t.getStudent().getId()), 
 					fileDBService.getTaskProveFile(t.getFile().getId()), teamService.findAllTeamMemberByTeamID(t.getTeam().getId()));
 		else
-			return new TaskUpdateDTO(t.getId(), t.getTittle(), t.getDescription(), t.getAssignDate(),
-					t.getEstimatedDueDate(), t.getPriority(), t.getStatus(), 
-					t.getWeightage(), studentService.getSearchStudentByI(t.getStudent().getId()), 
-					teamService.findAllTeamMemberByTeamID(t.getTeam().getId()));
+			if(t.getStudent()!=null)
+				return new TaskUpdateDTO(t.getId(), t.getTittle(), t.getDescription(), t.getAssignDate(),
+						t.getEstimatedDueDate(), t.getPriority(), t.getStatus(), 
+						t.getWeightage(), studentService.getSearchStudentByI(t.getStudent().getId()), 
+						teamService.findAllTeamMemberByTeamID(t.getTeam().getId()));
+			else
+				return new TaskUpdateDTO(t.getId(), t.getTittle(), t.getDescription(), t.getAssignDate(),
+						t.getEstimatedDueDate(), t.getPriority(), t.getStatus(), 
+						t.getWeightage(), null, 
+						teamService.findAllTeamMemberByTeamID(t.getTeam().getId()));
 	}
 	
 	@PostMapping("/tasks")

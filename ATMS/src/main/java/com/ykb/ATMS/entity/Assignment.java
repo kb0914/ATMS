@@ -152,6 +152,13 @@ public class Assignment {
 		
 		team.setAssignment(this);
 	}
+	
+	public void removeTeam(Team team) {
+		
+		this.team.remove(team);
+		
+		team.setAssignment(null);
+	}
 
 	@Override
 	public String toString() {

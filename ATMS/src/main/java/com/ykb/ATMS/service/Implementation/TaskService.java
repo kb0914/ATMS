@@ -90,7 +90,17 @@ public class TaskService implements ITaskService{
 	}
 
 	@Override
-	public void update(Task task) {
+	public void update(Task dto) {
+		Task task=findById(dto.getId());
+		task.setTittle(dto.getTittle());
+		task.setAssignDate(dto.getAssignDate());
+		task.setEstimatedDueDate(dto.getEstimatedDueDate());
+		task.setDescription(dto.getDescription());
+		task.setStatus(dto.getStatus());
+		if(dto.getStudent()!=null)
+			task.setStudent(studentService.findById(dto.getStudent().getId()));
+		else
+			task.setStudent(null);
 		taskRepository.save(task);
 	}
 	
@@ -124,7 +134,7 @@ public class TaskService implements ITaskService{
 	@Override
 	public DistributeTasksDTO distributeTasks(long teamId, List<Task> tasks){
 		
-		List<Student> members=teamService.findById(teamId).getStudents();
+		List<Student> members=teamService.findById(teamId).getStudents().stream().map(i->i.getStudent()).toList();
 		
 		List<Integer> weightages = new ArrayList<Integer>();
 		tasks.sort((o1, o2) -> o2.getWeightage()-o1.getWeightage());

@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import com.ykb.ATMS.entity.Lecturer;
 import com.ykb.ATMS.entity.Student;
+import com.ykb.ATMS.entity.User;
+import com.ykb.ATMS.repository.UserRepository;
 import com.ykb.ATMS.service.Interface.ILecturerService;
 import com.ykb.ATMS.service.Interface.IStudentService;
 
@@ -26,25 +28,25 @@ public class JwtUserDetailsService implements UserDetailsService{
 	
 	@Override
 	public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		return loadStudentUser(username);
+		return loadUser(username);
 	}
 	
-	private CustomUserDetails  loadStudentUser(String username) throws UsernameNotFoundException {
+	private CustomUserDetails  loadUser(String username) throws UsernameNotFoundException {
 
-		Student userAccount=studentService.findByUsername(username);
-		Collection<GrantedAuthority> gas = new HashSet<>();
-        gas.add(new SimpleGrantedAuthority("STUDENT"));
-        
-        return new CustomUserDetails(userAccount.getId(),userAccount.getUsername(), userAccount.getPassword(), gas);
-    }
-	
-	public CustomUserDetails  loadLecturerUser(String username) throws UsernameNotFoundException {
-
-		Lecturer userAccount=lecturerService.findByUsername(username);
-		Collection<GrantedAuthority> gas = new HashSet<>();
-        gas.add(new SimpleGrantedAuthority("Lecturer"));
-        
-        return new CustomUserDetails(userAccount.getId(),userAccount.getUsername(), userAccount.getPassword(), gas);
+		User userAccount=studentService.findByUsername(username);
+		if(userAccount!=null) {
+			Collection<GrantedAuthority> gas = new HashSet<>();
+	        gas.add(new SimpleGrantedAuthority("STUDENT"));
+	        
+	        return new CustomUserDetails(userAccount.getId(),userAccount.getUsername(), userAccount.getPassword(), gas);
+		}else {
+			userAccount=lecturerService.findByUsername(username);
+			Collection<GrantedAuthority> gas = new HashSet<>();
+			gas.add(new SimpleGrantedAuthority("LECTURER"));
+	        
+	        return new CustomUserDetails(userAccount.getId(),userAccount.getUsername(), userAccount.getPassword(), gas);	
+		}
+		
     }
 
 }

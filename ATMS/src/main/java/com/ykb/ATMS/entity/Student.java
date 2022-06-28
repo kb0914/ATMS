@@ -2,6 +2,7 @@ package com.ykb.ATMS.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -21,16 +22,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="student")
-public class Student {
+public class Student extends User{
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
-	private long id;
-	
-	@Column(name="username", nullable = false, unique = true)
-	private String username;
-	
 	@Column(name="first_name")
 	private String firstName;
 	
@@ -44,15 +37,13 @@ public class Student {
 	@JsonIgnore
 	private String password;
 	
-	@ManyToMany(fetch = FetchType.LAZY, 
-			cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+	@OneToMany(
+		fetch = FetchType.LAZY, 
+        mappedBy = "student",
+        cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH}
+    )
 	@JsonIgnore
-	@JoinTable(
-			name="team_student",
-			joinColumns = @JoinColumn(name="student_id"),
-			inverseJoinColumns = @JoinColumn(name="team_id")
-			)
-	private List<Team> teams;
+    private List<TeamStudent> teams;
 	
 	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
 	@JoinColumn(name="intake_id")
@@ -135,11 +126,11 @@ public class Student {
 		this.password = password;
 	}
 
-	public List<Team> getTeams() {
+	public List<TeamStudent> getTeams() {
 		return teams;
 	}
 
-	public void setTeams(List<Team> teams) {
+	public void setTeams(List<TeamStudent> teams) {
 		this.teams = teams;
 	}
 
@@ -189,5 +180,21 @@ public class Student {
 		return "Student [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
 				+ ", password=" + password +"]";
 	}
+	
+//	@Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+// 
+//        if (o == null || getClass() != o.getClass())
+//            return false;
+// 
+//        Student student = (Student) o;
+//        return Objects.equals(username, student.username);
+//    }
+// 
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(username);
+//    }
 	
 }

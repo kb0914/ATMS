@@ -7,15 +7,18 @@ import com.ykb.ATMS.entity.Task;
 public class TeamDTO {
 	private long id;
 	private Assignment assignment;
-	private List<SearchStudentDTO> students;
+	private List<SearchStudentDTO> studentsDTO;
 	private List<Task> tasks;
 	private SearchStudentDTO teamLead;
+	
+	public TeamDTO() {
+	}
 	
 	public TeamDTO(long id, Assignment assignment, List<SearchStudentDTO> students, List<Task> tasks) {
 		super();
 		this.id = id;
 		this.assignment = assignment;
-		this.students = students;
+		this.studentsDTO = students;
 		this.tasks = tasks;
 	}
 
@@ -36,11 +39,11 @@ public class TeamDTO {
 	}
 
 	public List<SearchStudentDTO> getStudents() {
-		return students;
+		return studentsDTO;
 	}
 
 	public void setStudents(List<SearchStudentDTO> students) {
-		this.students = students;
+		this.studentsDTO = students;
 	}
 
 	public List<Task> getTasks() {

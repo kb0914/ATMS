@@ -7,14 +7,14 @@ import com.ykb.ATMS.entity.Team;
 
 public class TeamListDTO {
 	private Assignment assignment;
-	private List<Team> assignmentTeam;
+	private List<TeamDTO> assignmentTeam;
 	private List<SearchStudentDTO> teamedStudent;
 	private List<SearchStudentDTO> options;
 	
 	public TeamListDTO() {
 	}
 	
-	public TeamListDTO(Assignment assignment, List<Team> assignmentTeam, List<SearchStudentDTO> teamedStudent,
+	public TeamListDTO(Assignment assignment, List<TeamDTO> assignmentTeam, List<SearchStudentDTO> teamedStudent,
 			List<SearchStudentDTO> options) {
 		this.assignment = assignment;
 		this.assignmentTeam = assignmentTeam;
@@ -28,10 +28,10 @@ public class TeamListDTO {
 	public void setAssignment(Assignment assignment) {
 		this.assignment = assignment;
 	}
-	public List<Team> getAssignmentTeam() {
+	public List<TeamDTO> getAssignmentTeam() {
 		return assignmentTeam;
 	}
-	public void setAssignmentTeam(List<Team> assignmentTeam) {
+	public void setAssignmentTeam(List<TeamDTO> assignmentTeam) {
 		this.assignmentTeam = assignmentTeam;
 	}
 	public List<SearchStudentDTO> getTeamedStudent() {

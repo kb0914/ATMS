@@ -43,13 +43,9 @@ public class TeamRestController {
 	}
 	
 	@GetMapping("/teams/{id}")
-	public Team findById(@PathVariable long id){
+	public TeamDTO findById(@PathVariable long id){
 		
-		Team team = teamService.findById(id);
-		if(team==null)
-			throw new RuntimeException("Team id not found - " + id);
-		
-		return team;
+		return teamService.getDTOById(id);
 	}
 	
 	@GetMapping("/teams/assignment/{id}")

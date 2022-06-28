@@ -5,6 +5,7 @@ import java.util.List;
 import com.ykb.ATMS.DTO.SearchStudentDTO;
 import com.ykb.ATMS.DTO.StudentInfoDTO;
 import com.ykb.ATMS.DTO.StudentListDTO;
+import com.ykb.ATMS.DTO.TeamDTO;
 import com.ykb.ATMS.entity.Student;
 import com.ykb.ATMS.entity.Team;
 
@@ -26,7 +27,7 @@ public interface IStudentService {
 
 	SearchStudentDTO getSearchStudentByI(long id);
 
-	List<Team> getTeamById(long id);
+	List<TeamDTO> getTeamById(long id);
 
 	Student findByUsername(String username);
 
