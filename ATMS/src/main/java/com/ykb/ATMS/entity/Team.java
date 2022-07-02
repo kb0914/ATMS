@@ -17,6 +17,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -33,10 +34,12 @@ public class Team {
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
 	@JoinColumn(name="assingment_id")
 	private Assignment assignment;
+	
 	@OneToMany(
 		fetch = FetchType.LAZY, 
         mappedBy = "team",
-        cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}
+        cascade = {CascadeType.ALL},
+        orphanRemoval = true
     )
     private List<TeamStudent> students;
 	
@@ -55,6 +58,13 @@ public class Team {
 			cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE})
 	@JsonIgnore
 	private List<FileDB> files;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinTable(name = "TeamMainFile",
+		joinColumns = @JoinColumn(name = "team_id"),
+		inverseJoinColumns = @JoinColumn(name = "file_id"))
+	@JsonIgnore
+	private FileDB mainFile;
 
 	public Team() {
 		
@@ -112,12 +122,19 @@ public class Team {
 		this.files = files;
 	}
 
+	public FileDB getMainFile() {
+		return mainFile;
+	}
+
+	public void setMainFile(FileDB mainFile) {
+		this.mainFile = mainFile;
+	}
+
 	public void addStudent(Student student) {
 		if(this.students ==  null) {
 			this.students = new ArrayList<>();
 		}
 		TeamStudent ts=new TeamStudent(this, student);
-		System.out.println(this+":"+student);
 		this.students.add(ts);
 		student.getTeams().add(ts);
 	}
@@ -131,21 +148,18 @@ public class Team {
                     ts.getStudent().equals(student)) {
                 iterator.remove();
                 ts.getStudent().getTeams().remove(ts);
-                ts.setStudent(student);
+                ts.setStudent(null);
                 ts.setTeam(null);
             }
         }
-    }
-	
-	public void removeAllStudent() {
-		int sLength=students.size();
-        for(int i=0; i<sLength;i++) {
-        	TeamStudent ts=students.get(sLength);
-        	students.remove(ts);
-        	ts.getStudent().getTeams().remove(ts);
-            //ts.setStudent(student);
-            ts.setTeam(null);
-        }
+//		List<TeamStudent> temp=this.students;
+//		for(int i=0; i<temp.size();i++) {
+//			if(students.get(i).getTeam().getId()==this.id&&students.get(i).getStudent().getId()==student.getId()) {
+//				students.get(i).getStudent().setTeams(null);
+//				students.get(i).getTeam().setStudents(null);
+//				students.remove(students.get(i));
+//			}
+//		}
     }
 	
 	public void addFile(FileDB file) {

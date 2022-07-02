@@ -31,13 +31,11 @@ import com.ykb.ATMS.service.Interface.IStudentService;
 public class StudentRestController {
 
 	private IStudentService studentService;
-	private IIntakeService intakeService;
 	private ModelMapper modelMapper;
 	
 	@Autowired
-	public StudentRestController(IStudentService studentService, IIntakeService intakeService, ModelMapper modelMapper) {
+	public StudentRestController(IStudentService studentService, ModelMapper modelMapper) {
 		this.studentService = studentService;
-		this.intakeService=intakeService;
 		this.modelMapper=modelMapper;
 	}
 	
@@ -53,11 +51,12 @@ public class StudentRestController {
 	}
 	
 	@GetMapping("/students/{studentId}")
-	public StudentInfoDTO findById(@PathVariable long studentId){
+	public Student findById(@PathVariable long studentId){
 		
-		Student student = studentService.findById(studentId);
-		
-		return modelMapper.map(student, StudentInfoDTO.class);
+//		Student student = studentService.findById(studentId);
+//		
+//		return modelMapper.map(student, StudentInfoDTO.class);
+		return studentService.findById(studentId);
 	}
 	
 	@GetMapping("/students/getfnid")

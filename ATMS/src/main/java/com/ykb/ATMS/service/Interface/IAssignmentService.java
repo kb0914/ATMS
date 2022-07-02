@@ -1,5 +1,6 @@
 package com.ykb.ATMS.service.Interface;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 
 import com.ykb.ATMS.entity.Assignment;
@@ -16,4 +17,8 @@ public interface IAssignmentService {
 	public void deleteById(long id);
 	
 	public void update(Assignment assignment);
+
+	ByteArrayInputStream load(long aid);
+
+	List<Assignment> getAssignmentsByLEcturerId(long id);
 }

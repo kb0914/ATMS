@@ -12,6 +12,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 import com.ykb.ATMS.entity.Assignment;
 import com.ykb.ATMS.service.Interface.IAssignmentService;
@@ -45,6 +50,22 @@ public class AssignmentRestController {
 		
 		return assignment;
 	}
+	
+	@GetMapping("/assignments/getassignmentsbylecturerid/{lid}")
+	public List<Assignment> getAssignmentsByLEcturerId(@PathVariable long lid){
+		
+		return assignmentService.getAssignmentsByLEcturerId(lid);
+	}
+	
+	@GetMapping("/assignments/downloadmarks/{aid}")
+	  public ResponseEntity<Resource> getFile(@PathVariable long aid) {
+	    String filename = "Assignment_"+aid+".xlsx";
+	    InputStreamResource file = new InputStreamResource(assignmentService.load(aid));
+	    return ResponseEntity.ok()
+	        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+	        .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+	        .body(file);
+	  }
 	
 	@PostMapping("/assignments/{lid}")
 	public Assignment addAssignment(@RequestBody Assignment assignment, @PathVariable long lid){

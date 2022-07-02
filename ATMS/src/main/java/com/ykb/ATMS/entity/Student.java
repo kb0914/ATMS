@@ -40,7 +40,8 @@ public class Student extends User{
 	@OneToMany(
 		fetch = FetchType.LAZY, 
         mappedBy = "student",
-        cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH}
+        cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH},
+        orphanRemoval = true
     )
 	@JsonIgnore
     private List<TeamStudent> teams;

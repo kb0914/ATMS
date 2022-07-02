@@ -2,6 +2,7 @@ package com.ykb.ATMS.DTO;
 
 import java.util.List;
 import com.ykb.ATMS.entity.Assignment;
+import com.ykb.ATMS.entity.FileDB;
 import com.ykb.ATMS.entity.Task;
 
 public class TeamDTO {
@@ -10,16 +11,33 @@ public class TeamDTO {
 	private List<SearchStudentDTO> studentsDTO;
 	private List<Task> tasks;
 	private SearchStudentDTO teamLead;
+	private FileRespondDTO mainFile;
 	
 	public TeamDTO() {
 	}
 	
 	public TeamDTO(long id, Assignment assignment, List<SearchStudentDTO> students, List<Task> tasks) {
-		super();
 		this.id = id;
 		this.assignment = assignment;
 		this.studentsDTO = students;
 		this.tasks = tasks;
+	}
+	
+	public TeamDTO(long id, Assignment assignment, List<SearchStudentDTO> students, List<Task> tasks, FileRespondDTO mainFile) {
+		this.id = id;
+		this.assignment = assignment;
+		this.studentsDTO = students;
+		this.tasks = tasks;
+		this.mainFile=mainFile;
+	}
+	
+	public TeamDTO(long id, Assignment assignment, List<SearchStudentDTO> students, 
+			FileRespondDTO mainFile, SearchStudentDTO teamLead) {
+		this.id = id;
+		this.assignment = assignment;
+		this.studentsDTO = students;
+		this.mainFile=mainFile;
+		this.teamLead=teamLead;
 	}
 
 	public long getId() {
@@ -60,6 +78,14 @@ public class TeamDTO {
 
 	public void setTeamLead(SearchStudentDTO teamLead) {
 		this.teamLead = teamLead;
+	}
+
+	public FileRespondDTO getMainFile() {
+		return mainFile;
+	}
+
+	public void setMainFile(FileRespondDTO mainFile) {
+		this.mainFile = mainFile;
 	}
 	
 	

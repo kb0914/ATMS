@@ -95,7 +95,7 @@ public class StudentService implements IStudentService {
 		student.setLastName(dto.getLastName());
 		student.setEmail(dto.getEmail());
 		student.setIntake(dto.getIntake());
-		student.setPassword(bcryptEncoder.encode(dto.getPassword()));
+		//student.setPassword(bcryptEncoder.encode(dto.getPassword()));
 		
 		return studentRepository.save(student);
 	}
@@ -162,7 +162,8 @@ public class StudentService implements IStudentService {
 		return dto;
 	}
 	
-	private SearchStudentDTO convertToDto(Student post) {
+	@Override
+	public SearchStudentDTO convertToDto(Student post) {
 		
 		SearchStudentDTO postDto = modelMapper.map(post, SearchStudentDTO.class);
 		

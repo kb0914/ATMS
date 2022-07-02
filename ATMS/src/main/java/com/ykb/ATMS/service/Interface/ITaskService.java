@@ -3,6 +3,7 @@ package com.ykb.ATMS.service.Interface;
 import java.util.List;
 
 import com.ykb.ATMS.DTO.DistributeTasksDTO;
+import com.ykb.ATMS.DTO.StudentTasksDTO;
 import com.ykb.ATMS.DTO.TaskUpdateDTO;
 import com.ykb.ATMS.entity.Student;
 import com.ykb.ATMS.entity.Task;
@@ -28,5 +29,7 @@ public interface ITaskService {
 	void updateAssignTo(List<Task> tasks);
 
 	void updateAssignTo(List<Task> tasks, long sid);
+
+	List<StudentTasksDTO> getStudentTaskStatusNumber(long id);
 
 }

@@ -38,7 +38,7 @@ public class Assignment {
 	private Date assignDate;
 	
 	@Column(name="due_date")
-	private String dueDate;
+	private Date dueDate;
 	
 	@ManyToOne(fetch = FetchType.LAZY,
 			cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
@@ -62,7 +62,7 @@ public class Assignment {
 
 	public Assignment() {}
 	
-	public Assignment(String name, String description, Date assignDate, String dueDate, Lecturer lecturer, int maxTeamMember) {
+	public Assignment(String name, String description, Date assignDate, Date dueDate, Lecturer lecturer, int maxTeamMember) {
 		this.name = name;
 		this.description = description;
 		this.assignDate = assignDate;
@@ -111,11 +111,11 @@ public class Assignment {
 		this.assignDate = assignDate;
 	}
 
-	public String getDueDate() {
+	public Date getDueDate() {
 		return dueDate;
 	}
 
-	public void setDueDate(String dueDate) {
+	public void setDueDate(Date dueDate) {
 		this.dueDate = dueDate;
 	}
 

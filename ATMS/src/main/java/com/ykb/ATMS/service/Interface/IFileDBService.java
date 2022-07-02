@@ -28,4 +28,8 @@ public interface IFileDBService {
 
 	void deleteFile(long id);
 
+	void storeMainFile(MultipartFile file, long tid, long sid) throws IOException;
+
+	List<FileRespondDTO> getFileListByTeamId(long tid);
+
 }

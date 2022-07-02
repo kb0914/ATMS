@@ -36,4 +36,6 @@ public interface IStudentService {
 	Student create(StudentInfoDTO dto);
 
 	void save(Student student);
+
+	SearchStudentDTO convertToDto(Student post);
 }

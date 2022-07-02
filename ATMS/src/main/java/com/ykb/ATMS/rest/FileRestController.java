@@ -44,6 +44,12 @@ public class FileRestController {
 	    return ResponseEntity.status(HttpStatus.OK).body(fileDBService.getFileList());
 	}
 	
+	@GetMapping("/files/team/{tid}")
+	public ResponseEntity<List<FileRespondDTO>> getListFiles(@PathVariable long tid) {
+	    		
+	    return ResponseEntity.status(HttpStatus.OK).body(fileDBService.getFileListByTeamId(tid));
+	}
+	
 	@GetMapping("/files/{id}")
 	public ResponseEntity<byte[]> getFile(@PathVariable long id) {
 	    FileDB fileDB = fileDBService.getFile(id);
@@ -66,9 +72,24 @@ public class FileRestController {
 	    }
 	  }
 	
+	@PostMapping("/uploadMainFile/{tid}/{sid}")
+	public ResponseEntity<FileRespondMessage> uploadMainFile(@RequestParam("file") MultipartFile file,
+			@PathVariable long sid, @PathVariable long tid) {
+	    String message = "";
+	    try {
+	    	fileDBService.storeMainFile(file, tid, sid);
+	      message = "Uploaded the file successfully: " + file.getOriginalFilename();
+	      return ResponseEntity.status(HttpStatus.OK).body(new FileRespondMessage(message));
+	    } catch (Exception e) {
+	    	System.out.println(e);
+	      message = "Could not upload the file: " + file.getOriginalFilename() + "!";
+	      return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new FileRespondMessage(message));
+	    }
+	  }
+	
 	@PutMapping("/files/{id}")
 	public void linkTaskToFile(@RequestBody List<Task> tasks, @PathVariable long id) {
-		fileDBService.linkTaskToFile(id, tasks);
+		fileDBService.linkTaskToFile(id, tasks); 
 		
 	}
 	

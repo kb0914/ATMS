@@ -10,28 +10,40 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.ykb.ATMS.DTO.SearchStudentDTO;
+import com.ykb.ATMS.DTO.StudentTasksDTO;
 import com.ykb.ATMS.DTO.TeamDTO;
 import com.ykb.ATMS.DTO.TeamListDTO;
+import com.ykb.ATMS.DTO.TeamStudentDTO;
 import com.ykb.ATMS.entity.Assignment;
 import com.ykb.ATMS.entity.Student;
 import com.ykb.ATMS.entity.Team;
+import com.ykb.ATMS.entity.TeamStudent;
+import com.ykb.ATMS.enums.AssignmentStatus;
 import com.ykb.ATMS.repository.AssignmentRepository;
+import com.ykb.ATMS.repository.TaskRepository;
 import com.ykb.ATMS.repository.TeamRepository;
+import com.ykb.ATMS.repository.TeamStudentRepository;
+import com.ykb.ATMS.service.Interface.IAssignmentService;
+import com.ykb.ATMS.service.Interface.IStudentService;
+import com.ykb.ATMS.service.Interface.ITaskService;
 import com.ykb.ATMS.service.Interface.ITeamService;
 
 @Service
 public class TeamService implements ITeamService{
 
 	private TeamRepository teamRepository;
-	private AssignmentService assignmentService;
-	private StudentService studentService;
+	private IAssignmentService assignmentService;
+	private IStudentService studentService;
+	//private ITaskService taskService;
 	private ModelMapper modelMapper;
 	
 	@Autowired
-	public TeamService(TeamRepository teamRepository, AssignmentService assignmentService, StudentService studentService, ModelMapper modelMapper) {
+	public TeamService(TeamRepository teamRepository, IAssignmentService assignmentService, IStudentService studentService
+			, ModelMapper modelMapper, TeamStudentRepository teamStudentRepository) {
 		this.teamRepository=teamRepository;
 		this.assignmentService=assignmentService;
 		this.studentService=studentService;
+		//this.taskService=taskService;
 		this.modelMapper=modelMapper;
 	}
 	
@@ -55,11 +67,21 @@ public class TeamService implements ITeamService{
 	}
 	
 	@Override
-	public TeamDTO getDTOById(long id) {
+	public TeamDTO getTeamDTOById(long id) {
 		
 		Team i=findById(id);
-		
-		return new TeamDTO(i.getId(), i.getAssignment(), findAllTeamMemberByTeamID(id), null);
+		if(i.getMainFile()!=null) {
+			return new TeamDTO(i.getId(), i.getAssignment(), findAllTeamMemberByTeamID(id),
+					FileDBService.convertFileToFileRespond(i.getMainFile()), studentService.convertToDto(i.getTeamLead()));
+		}else {
+			return new TeamDTO(i.getId(), i.getAssignment(), findAllTeamMemberByTeamID(id),null,
+				studentService.convertToDto(i.getTeamLead()));
+		}
+	}
+	
+	@Override
+	public void save(Team team) {
+		teamRepository.save(team);
 	}
 
 	@Override
@@ -79,25 +101,56 @@ public class TeamService implements ITeamService{
 	
 	@Override
 	public void updateTeam(TeamDTO dto, long aid) {
-		Assignment assignment=assignmentService.findById(aid);
-		Team team=findById(dto.getId());		
-		team.setAssignment(assignment);
-		team.setTeamLead(studentService.findById(dto.getTeamLead().getId()));
-		if(team.getStudents()!=null) {
-			List<Student> studentToBeRemove=team.getStudents().stream().map(i->i.getStudent()).toList();
-			for(Student s:studentToBeRemove) {
-				team.removeStudent(s);
+		Team team=findById(dto.getId());	
+//		team.setTeamLead(studentService.findById(dto.getTeamLead().getId()));
+//		
+//		List<Student> newList=dto.getStudents().stream().map(i->studentService.findById(i.getId())).toList();
+//		List<Student> defaultList=team.getStudents().stream().map(i->i.getStudent()).toList();
+//		
+//		boolean newStudent=false;
+//		
+//		for(Student n:newList) {
+//			for(Student d:defaultList) {
+//				if(n.getId()!=d.getId()) {
+//					newStudent=true;
+//					System.out.println(n.toString());
+//				}
+//			}
+//			if(newStudent)
+//				addTeamMember(team,n);
+//			newStudent=false;
+//		}
+//		teamRepository.saveAndFlush(team);
+//		boolean deleteStudent=false;
+//		
+//		for(Student n:defaultList) {
+//			for(Student d:newList) {
+//				if(n.getId()!=d.getId()) {
+//					deleteStudent=true;
+//					System.out.println(n.toString());
+//				}
+//			}
+//			if(deleteStudent)
+//				deleteTeamMember(team, n);
+//			deleteStudent=false;
+//		}
+//		
+//		teamRepository.saveAndFlush(team);
+		//deleteTeamMember(team, studentService.convertToDto(studentService.findById(19)));
+	}
+	
+	@Override
+	public void updateMemberMarks(long tid, TeamStudentDTO dto) {
+		Team team=findById(tid);
+		//team.getStudents().stream().filter(i->i.getStudent().getId()==dto.getId()).findFirst().orElse(null).setMark(dto.getMark());
+		//System.out.println(team.getStudents().stream().filter(i->i.getStudent().getId()==dto.getId()).findFirst().orElse(null).getStudent().toString());
+		team.getStudents().forEach(i->{
+			if(i.getStudent().getId()==dto.getId()) {
+				i.setMark(dto.getMark());
+				System.out.println(i.getMark());
 			}
-			team=teamRepository.save(team);
-		}
-		for(SearchStudentDTO s:dto.getStudents()) {
-			team.addStudent(studentService.findById(s.getId()));
-		}
-//		dto.getStudents().forEach(
-//				i->team.addStudent(studentService.findById(i.getId())));
-		assignment.addTeam(team);
-		assignmentService.update(assignment);
-		//teamRepository.save(team);
+		});
+		save(team);
 	}
 
 	@Override
@@ -106,15 +159,23 @@ public class TeamService implements ITeamService{
 	}
 
 	@Override
-	public void addTeamMember(Team team, Student student) {
-		team.addStudent(studentService.findById(student.getId()));
+	public void assignTeamLead(TeamDTO dto) {
+		Team team=findById(dto.getId());
+		team.setTeamLead(studentService.findById(dto.getTeamLead().getId()));
 		teamRepository.save(team);
 	}
 	
 	@Override
-	public void deleteTeamMember(Team team, Student student) {
-		List<Student> students=team.getStudents().stream().map(i->i.getStudent()).toList();
-		students.removeIf(i->student.getId()==i.getId());
+	public void addTeamMember(long id, long sid) {
+		Team team=findById(id); 
+		team.addStudent(studentService.findById(sid));
+		teamRepository.save(team);
+	}
+	
+	@Override
+	public void deleteTeamMember(long id, long sid) {
+		Team team=findById(id);
+		team.removeStudent(studentService.findById(sid));
 		teamRepository.save(team);
 	}
 	
@@ -157,6 +218,17 @@ public class TeamService implements ITeamService{
 	}
 	
 	@Override
+	public List<TeamStudentDTO> findTeamStudentByTeamID(long id){
+		
+		List<TeamStudentDTO> studentDto = new ArrayList<>();
+		findById(id).getStudents().stream().forEach(i->studentDto.add(
+				new TeamStudentDTO(i.getStudent().getId(), i.getStudent().getUsername(),i.getStudent().getFirstName(),
+						i.getStudent().getLastName(),i.getMark())));
+		
+		return studentDto;
+	}
+	
+	@Override
 	public TeamListDTO getTeamListItem(long id) {
 		TeamListDTO dto=new TeamListDTO();
 		List<TeamDTO> teamdto=new ArrayList<>();
@@ -174,5 +246,25 @@ public class TeamService implements ITeamService{
 		
 		return dto;
 	}
-
+	
+	@Override
+	public List<SearchStudentDTO> getUnTeanedStudentByAssignemntId(long aid){
+		List<SearchStudentDTO> allStudent=assignmentService.findById(aid).getIntake().getStudents().stream()
+				.map(i->studentService.convertToDto(i)).toList();
+		
+		List<SearchStudentDTO> unteamedStudent=new ArrayList<SearchStudentDTO>();
+		boolean flag=false;
+		for(SearchStudentDTO i:allStudent) {
+			for(SearchStudentDTO a:findTeamedStudentByAssignemntId(aid)) {
+				if(i.getId()==a.getId()) {
+					flag=true;
+				}
+			}
+			if(!flag) {
+				unteamedStudent.add(i);
+			}
+			flag=false;
+		}
+		return unteamedStudent;
+	}
 }

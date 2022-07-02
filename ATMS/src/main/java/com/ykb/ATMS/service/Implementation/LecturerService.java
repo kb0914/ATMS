@@ -83,7 +83,7 @@ public class LecturerService implements ILecturerService{
 		lec.setFirstName(dto.getFirstName());
 		lec.setLastName(dto.getLastName());
 		lec.setEmail(dto.getEmail());
-		lec.setPassword(bcryptEncoder.encode(dto.getPassword()));
+		//lec.setPassword(bcryptEncoder.encode(dto.getPassword()));
 		
 		return lecturerRepository.save(lec);
 	}

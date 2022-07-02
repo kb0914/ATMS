@@ -9,7 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ykb.ATMS.DTO.DistributeTasksDTO;
+import com.ykb.ATMS.DTO.SearchStudentDTO;
+import com.ykb.ATMS.DTO.StudentTasksDTO;
 import com.ykb.ATMS.DTO.TaskUpdateDTO;
+import com.ykb.ATMS.DTO.TeamStudentDTO;
+import com.ykb.ATMS.entity.FileDB;
 import com.ykb.ATMS.entity.Student;
 import com.ykb.ATMS.entity.Task;
 import com.ykb.ATMS.entity.Team;
@@ -26,15 +30,13 @@ import com.ykb.ATMS.service.Interface.ITeamService;
 public class TaskService implements ITaskService{
 
 	private TaskRepository taskRepository;
-	private TeamRepository teamRepository;
 	private IStudentService studentService;
 	private ITeamService teamService;
 	
 	@Autowired
-	public TaskService(TaskRepository taskRepository, TeamRepository teamRepository, IStudentService studentService,
+	public TaskService(TaskRepository taskRepository, IStudentService studentService,
 			ITeamService teamService) {
 		this.taskRepository=taskRepository;
-		this.teamRepository=teamRepository;
 		this.studentService=studentService;
 		this.teamService=teamService;
 	}
@@ -65,14 +67,16 @@ public class TaskService implements ITaskService{
 
 	@Override
 	public void create(Task task, long tid) {
-		Optional<Team> result=teamRepository.findById(tid);
-		Team team=null;
-		if(result!=null) {
-			team=result.get();
+		Team team=teamService.findById(tid);
+		
+		if(team!=null) {
+			if(task.getStudent()!=null) {
+				System.out.println(task.getStudent().toString());
+				task.setStudent(studentService.findById(task.getStudent().getId()));
+			}
 			team.addTask(task);
-			teamRepository.save(team);
-		}else
-			throw new RuntimeException("Team ID not found - "+tid);
+			teamService.save(team);
+		}
 		
 //		Optional<Student> result1=studentRepository.findById(sid);
 //		Student student=null;
@@ -164,6 +168,30 @@ public class TaskService implements ITaskService{
 		
 		
 		return new DistributeTasksDTO(tasks, weightages);
+	}
+	
+	@Override
+	public List<StudentTasksDTO> getStudentTaskStatusNumber(long id){
+		List<TeamStudentDTO> allStudent=teamService.findTeamStudentByTeamID(id);
+		List<StudentTasksDTO> dto =new ArrayList<StudentTasksDTO>();
+		allStudent.forEach(i->{
+			StudentTasksDTO temp=new StudentTasksDTO();
+			temp.setStudent(i);
+			getTasksByStudentAdnTeamID(i.getId(), id).stream().forEach(t->{
+				if(t.getStatus()==AssignmentStatus.COMPLETED)
+					temp.setCompletedTaskNum(temp.getCompletedTaskNum()+t.getWeightage());
+				if(t.getStatus()==AssignmentStatus.PENDING)
+					temp.setPendingTaskNum(temp.getPendingTaskNum()+t.getWeightage());
+				if(t.getStatus()==AssignmentStatus.STARTED)
+					temp.setStartedTaskNum(temp.getStartedTaskNum()+t.getWeightage());
+			});
+			FileDB mainfile=teamService.findById(id).getMainFile();
+			if(mainfile!=null)
+				temp.setMainFile(FileDBService.convertFileToFileRespond(mainfile));
+			dto.add(temp);
+		});
+		
+		return dto;
 	}
 	
 	private static int sumOfList(List<Task> list) {

@@ -53,6 +53,20 @@ public class FileDBService implements IFileDBService{
 	  }
 	
 	@Override
+	public void storeMainFile(MultipartFile file, long tid, long sid) throws IOException {
+	    String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+	    Team team =teamService.findById(tid);
+	    if(team.getMainFile()!=null) {
+		    long fid=team.getMainFile().getId();
+		    team.setMainFile(null);
+		    fileDBRepository.deleteById(fid);
+	    }
+	    FileDB fileDB = new FileDB(fileName, file.getContentType(),file.getBytes(), new Date(System.currentTimeMillis()), team.getTeamLead(), team);
+	    team.setMainFile(fileDB);
+	    teamService.save(team);
+	  }
+	
+	@Override
 	public void linkTaskToFile(long id, List<Task> tasks) {
 		FileDB file=getFile(id);
 		tasks.forEach(i->{
@@ -99,6 +113,12 @@ public class FileDBService implements IFileDBService{
 	}
 	
 	@Override
+	public List<FileRespondDTO> getFileListByTeamId(long tid) {
+		return teamService.findById(tid).getFiles().stream()
+				.map(i->convertFileToFileRespond(i)).toList();
+	}
+	
+	@Override
 	public FileRespondDTO getTaskProveFile(long id) {
 		
 		return convertFileToFileRespond(getFile(id));
@@ -113,7 +133,7 @@ public class FileDBService implements IFileDBService{
 	    fileDBRepository.deleteById(id);
 	}
 	
-	private FileRespondDTO convertFileToFileRespond(FileDB file) {
+	public static FileRespondDTO convertFileToFileRespond(FileDB file) {
 		String fileDownloadUri = ServletUriComponentsBuilder
 	    		 .fromCurrentContextPath()
 	    		 .path("/api/files/")

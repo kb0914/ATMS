@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ykb.ATMS.DTO.DistributeTasksDTO;
 import com.ykb.ATMS.DTO.LinkTaskDTO;
+import com.ykb.ATMS.DTO.StudentTasksDTO;
 import com.ykb.ATMS.DTO.TaskUpdateDTO;
 import com.ykb.ATMS.entity.Task;
 import com.ykb.ATMS.service.Interface.IFileDBService;
@@ -67,7 +68,8 @@ public class TaskRestController {
 	@GetMapping("/tasks/{sid}/{tid}/{fid}")
 	public LinkTaskDTO getTasksByStudentAdnTeamID(@PathVariable long sid, @PathVariable long tid, @PathVariable long fid){
 		LinkTaskDTO dto = new LinkTaskDTO();
-		List<Task> tasks=taskService.getTasksByStudentAdnTeamID(sid, tid);
+		//List<Task> tasks=taskService.getTasksByStudentAdnTeamID(sid, tid);
+		List<Task> tasks=taskService.findByTeam(tid);
 		dto.setAllTask(tasks.stream().filter(i->i.getFile()==null).toList());
 		dto.setLinkedTask(tasks.stream()
 				.filter(i->i.getFile()!=null)
@@ -75,6 +77,8 @@ public class TaskRestController {
 				.toList());
 		return dto;
 	}
+	
+	
 	
 	@GetMapping("/tasks/TaskUpdateDTO/{id}")
 	public TaskUpdateDTO getTaskUpdateElement(@PathVariable long id) {
@@ -95,6 +99,12 @@ public class TaskRestController {
 						t.getEstimatedDueDate(), t.getPriority(), t.getStatus(), 
 						t.getWeightage(), null, 
 						teamService.findAllTeamMemberByTeamID(t.getTeam().getId()));
+	}
+	
+	@GetMapping("/tasks/getStudentTaskStatusNumber/{tid}")
+	public List<StudentTasksDTO> getStudentTaskStatusNumber(@PathVariable long tid){
+		
+		return taskService.getStudentTaskStatusNumber(tid);
 	}
 	
 	@PostMapping("/tasks")

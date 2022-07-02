@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,6 +23,7 @@ import com.ykb.ATMS.DTO.StudentInfoDTO;
 import com.ykb.ATMS.config.CustomUserDetails;
 import com.ykb.ATMS.config.JwtTokenUtil;
 import com.ykb.ATMS.config.JwtUserDetailsService;
+import com.ykb.ATMS.entity.User;
 
 @CrossOrigin
 @RestController
@@ -46,6 +48,22 @@ public class JwtAuthenticationRestController {
 		
 		final String token = jwtTokenUtil.generateToken(userDetails);
 		return ResponseEntity.ok(new AuthResponseDTO(token, userDetails.getId(), userDetails.getUsername(), userDetails.getAuthorities().toArray()[0].toString()));
+	}
+	
+	@RequestMapping(value = "/verifyPassword", method = RequestMethod.POST)
+	public ResponseEntity<?> verifyPassword(@RequestBody AuthRequestDTO authenticationRequest)
+			throws Exception {
+		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+		
+		return ResponseEntity.ok(true);
+	}
+	
+	@RequestMapping(value = "/changePassword/{uid}", method = RequestMethod.POST)
+	public ResponseEntity<?> changePassword(@RequestBody String password, @PathVariable long uid)
+			throws Exception {
+		System.out.println(password+".");
+		userDetailsService.changePassword(uid, password);
+		return ResponseEntity.ok(true);
 	}
 
 	private void authenticate(String username, String password) throws Exception {

@@ -1,4 +1,4 @@
-package com.ykb.ATMS.rest;
+	package com.ykb.ATMS.rest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ykb.ATMS.DTO.SearchStudentDTO;
+import com.ykb.ATMS.DTO.StudentTasksDTO;
 import com.ykb.ATMS.DTO.TeamDTO;
 import com.ykb.ATMS.DTO.TeamListDTO;
+import com.ykb.ATMS.DTO.TeamStudentDTO;
 import com.ykb.ATMS.entity.Assignment;
 import com.ykb.ATMS.entity.Team;
 import com.ykb.ATMS.service.Interface.IAssignmentService;
@@ -45,7 +47,7 @@ public class TeamRestController {
 	@GetMapping("/teams/{id}")
 	public TeamDTO findById(@PathVariable long id){
 		
-		return teamService.getDTOById(id);
+		return teamService.getTeamDTOById(id);
 	}
 	
 	@GetMapping("/teams/assignment/{id}")
@@ -70,6 +72,12 @@ public class TeamRestController {
 		return teamService.findAllTeamMemberByTeamID(id);
 	}
 	
+	@GetMapping("/teams/getunteamedstudent/{id}")
+	public List<SearchStudentDTO> getUnTeanedStudentByAssignemntId(@PathVariable long id){
+		
+		return teamService.getUnTeanedStudentByAssignemntId(id);
+	}
+	
 	@PostMapping("/teams/{aid}")
 	public Team addAssignment(@RequestBody Team team, @PathVariable("aid") long aid){
 		
@@ -85,6 +93,37 @@ public class TeamRestController {
 		teamService.updateTeam(team, team.getAssignment().getId());
 		
 		return team;
+	}
+	
+	@PutMapping("/teams/deletemember/{tid}/{sid}")
+	public ResponseEntity deleteMember(@PathVariable("tid") long tid, @PathVariable("sid") long sid){
+		
+		teamService.deleteTeamMember(tid, sid);
+		
+		return ResponseEntity.ok().build();
+	}
+	
+	@PutMapping("/teams/addmember/{tid}/{sid}")
+	public ResponseEntity addMember(@PathVariable("tid") long tid, @PathVariable("sid") long sid){
+		
+		teamService.addTeamMember(tid, sid);
+		
+		return ResponseEntity.ok().build();
+	}
+	
+	@PutMapping("/teams/assignteamlead")
+	public ResponseEntity addMember(@RequestBody TeamDTO dto){
+		
+		teamService.assignTeamLead(dto);
+		
+		return ResponseEntity.ok().build();
+	}
+	
+	@PutMapping("/teams/updatemarks/{tid}")
+	public ResponseEntity updateAssignment(@RequestBody TeamStudentDTO team, @PathVariable("tid") long tid){
+		//System.out.println(team);
+		teamService.updateMemberMarks(tid, team);
+		return ResponseEntity.ok().build();
 	}
 	
 	@DeleteMapping("/teams/{id}")
