@@ -6,7 +6,8 @@ public class StudentTasksDTO {
 	private int completedTaskNum;
 	private int pendingTaskNum;
 	private int startedTaskNum;
-	private FileRespondDTO mainFile;
+	private double completedTaskPercentage;
+	
 	
 	public StudentTasksDTO() {
 		this.completedTaskNum=0;
@@ -18,13 +19,6 @@ public class StudentTasksDTO {
 		this.completedTaskNum = completedTaskNum;
 		this.pendingTaskNum = pendingTaskNum;
 		this.startedTaskNum = startedTaskNum;
-	}
-	public StudentTasksDTO(TeamStudentDTO student, int completedTaskNum, int pendingTaskNum, int startedTaskNum, FileRespondDTO mainFile) {
-		this.student = student;
-		this.completedTaskNum = completedTaskNum;
-		this.pendingTaskNum = pendingTaskNum;
-		this.startedTaskNum = startedTaskNum;
-		this.mainFile=mainFile;
 	}
 	
 	public TeamStudentDTO getStudent() {
@@ -51,11 +45,11 @@ public class StudentTasksDTO {
 	public void setStartedTaskNum(int startedTaskNum) {
 		this.startedTaskNum = startedTaskNum;
 	}
-	public FileRespondDTO getMainFile() {
-		return mainFile;
+	public double getCompletedTaskPercentage() {
+		return completedTaskPercentage;
 	}
-	public void setMainFile(FileRespondDTO mainFile) {
-		this.mainFile = mainFile;
+	public void setCompletedTaskPercentage(double completedTaskPercentage) {
+		this.completedTaskPercentage = completedTaskPercentage;
 	}
 	
 	

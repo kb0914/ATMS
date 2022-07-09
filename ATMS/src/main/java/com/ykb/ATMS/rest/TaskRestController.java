@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ykb.ATMS.DTO.DistributeTasksDTO;
 import com.ykb.ATMS.DTO.LinkTaskDTO;
+import com.ykb.ATMS.DTO.MarkAssignmentInfoDTO;
 import com.ykb.ATMS.DTO.StudentTasksDTO;
 import com.ykb.ATMS.DTO.TaskUpdateDTO;
 import com.ykb.ATMS.entity.Task;
@@ -102,7 +103,7 @@ public class TaskRestController {
 	}
 	
 	@GetMapping("/tasks/getStudentTaskStatusNumber/{tid}")
-	public List<StudentTasksDTO> getStudentTaskStatusNumber(@PathVariable long tid){
+	public MarkAssignmentInfoDTO getStudentTaskStatusNumber(@PathVariable long tid){
 		
 		return taskService.getStudentTaskStatusNumber(tid);
 	}

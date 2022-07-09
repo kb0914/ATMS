@@ -29,8 +29,6 @@ public interface ITeamService {
 
 	TeamListDTO getTeamListItem(long id);
 
-	void updateTeam(TeamDTO team, long aid);
-
 	TeamDTO getTeamDTOById(long id);
 
 	void save(Team team);
@@ -42,4 +40,8 @@ public interface ITeamService {
 	List<SearchStudentDTO> getUnTeanedStudentByAssignemntId(long aid);
 
 	void assignTeamLead(TeamDTO dto);
+
+	void createMultipleTeam(long aid, int num);
+
+	void updateTeamMark(long id, double mark);
 }

@@ -79,24 +79,30 @@ public class TeamRestController {
 	}
 	
 	@PostMapping("/teams/{aid}")
-	public Team addAssignment(@RequestBody Team team, @PathVariable("aid") long aid){
+	public Team createTeam(@RequestBody Team team, @PathVariable("aid") long aid){
 		
 		teamService.createTeam(team, aid);
 		
 		return team;
 	}
 	
+	@PostMapping("/teams/createmultipleteam/{aid}/{num}")
+	public ResponseEntity<?> createmultipleTeam(@PathVariable("num") int num, @PathVariable("aid") long aid){
+		
+		teamService.createMultipleTeam(aid, num);
+		
+		return ResponseEntity.ok().build();
+	}
 	
-	@PutMapping("/teams")
-	public TeamDTO updateAssignment(@RequestBody TeamDTO team){
+	@PostMapping("/teams/updatemark/{tid}")
+	public ResponseEntity<?> updateTeamMark(@RequestBody double num, @PathVariable("tid") long aid){
 		
-		teamService.updateTeam(team, team.getAssignment().getId());
-		
-		return team;
+		teamService.updateTeamMark(aid, num);
+		return ResponseEntity.ok().build();
 	}
 	
 	@PutMapping("/teams/deletemember/{tid}/{sid}")
-	public ResponseEntity deleteMember(@PathVariable("tid") long tid, @PathVariable("sid") long sid){
+	public ResponseEntity<?> deleteMember(@PathVariable("tid") long tid, @PathVariable("sid") long sid){
 		
 		teamService.deleteTeamMember(tid, sid);
 		
@@ -104,7 +110,7 @@ public class TeamRestController {
 	}
 	
 	@PutMapping("/teams/addmember/{tid}/{sid}")
-	public ResponseEntity addMember(@PathVariable("tid") long tid, @PathVariable("sid") long sid){
+	public ResponseEntity<?> addMember(@PathVariable("tid") long tid, @PathVariable("sid") long sid){
 		
 		teamService.addTeamMember(tid, sid);
 		
@@ -112,7 +118,7 @@ public class TeamRestController {
 	}
 	
 	@PutMapping("/teams/assignteamlead")
-	public ResponseEntity addMember(@RequestBody TeamDTO dto){
+	public ResponseEntity<?> addMember(@RequestBody TeamDTO dto){
 		
 		teamService.assignTeamLead(dto);
 		
@@ -120,14 +126,14 @@ public class TeamRestController {
 	}
 	
 	@PutMapping("/teams/updatemarks/{tid}")
-	public ResponseEntity updateAssignment(@RequestBody TeamStudentDTO team, @PathVariable("tid") long tid){
+	public ResponseEntity<?> updateAssignment(@RequestBody TeamStudentDTO team, @PathVariable("tid") long tid){
 		//System.out.println(team);
 		teamService.updateMemberMarks(tid, team);
 		return ResponseEntity.ok().build();
 	}
 	
 	@DeleteMapping("/teams/{id}")
-	public ResponseEntity deleteById(@PathVariable int id){
+	public ResponseEntity<?> deleteById(@PathVariable int id){
 		
 		Team team = teamService.findById(id);
 		

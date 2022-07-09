@@ -1,5 +1,7 @@
 package com.ykb.ATMS.service.Implementation;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -9,23 +11,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import com.ykb.ATMS.DTO.MarkAssignmentInfoDTO;
 import com.ykb.ATMS.DTO.SearchStudentDTO;
 import com.ykb.ATMS.DTO.StudentTasksDTO;
 import com.ykb.ATMS.DTO.TeamDTO;
 import com.ykb.ATMS.DTO.TeamListDTO;
 import com.ykb.ATMS.DTO.TeamStudentDTO;
 import com.ykb.ATMS.entity.Assignment;
+import com.ykb.ATMS.entity.FileDB;
 import com.ykb.ATMS.entity.Student;
+import com.ykb.ATMS.entity.Task;
 import com.ykb.ATMS.entity.Team;
 import com.ykb.ATMS.entity.TeamStudent;
 import com.ykb.ATMS.enums.AssignmentStatus;
-import com.ykb.ATMS.repository.AssignmentRepository;
-import com.ykb.ATMS.repository.TaskRepository;
 import com.ykb.ATMS.repository.TeamRepository;
 import com.ykb.ATMS.repository.TeamStudentRepository;
 import com.ykb.ATMS.service.Interface.IAssignmentService;
 import com.ykb.ATMS.service.Interface.IStudentService;
-import com.ykb.ATMS.service.Interface.ITaskService;
 import com.ykb.ATMS.service.Interface.ITeamService;
 
 @Service
@@ -88,62 +90,29 @@ public class TeamService implements ITeamService{
 	public void createTeam(Team team, long aid) {
 		Assignment assignment=assignmentService.findById(aid);
 		Student student=studentService.findById(team.getTeamLead().getId());
-		System.out.println(student);
 		Team tempTeam =new Team();
 		tempTeam.setId(0);
 		tempTeam.setTeamLead(student);
 		tempTeam=teamRepository.save(tempTeam);
-		System.out.println(tempTeam.getId());
 		tempTeam.addStudent(student);
 		assignment.addTeam(tempTeam);
 		assignmentService.update(assignment);
 	}
 	
 	@Override
-	public void updateTeam(TeamDTO dto, long aid) {
-		Team team=findById(dto.getId());	
-//		team.setTeamLead(studentService.findById(dto.getTeamLead().getId()));
-//		
-//		List<Student> newList=dto.getStudents().stream().map(i->studentService.findById(i.getId())).toList();
-//		List<Student> defaultList=team.getStudents().stream().map(i->i.getStudent()).toList();
-//		
-//		boolean newStudent=false;
-//		
-//		for(Student n:newList) {
-//			for(Student d:defaultList) {
-//				if(n.getId()!=d.getId()) {
-//					newStudent=true;
-//					System.out.println(n.toString());
-//				}
-//			}
-//			if(newStudent)
-//				addTeamMember(team,n);
-//			newStudent=false;
-//		}
-//		teamRepository.saveAndFlush(team);
-//		boolean deleteStudent=false;
-//		
-//		for(Student n:defaultList) {
-//			for(Student d:newList) {
-//				if(n.getId()!=d.getId()) {
-//					deleteStudent=true;
-//					System.out.println(n.toString());
-//				}
-//			}
-//			if(deleteStudent)
-//				deleteTeamMember(team, n);
-//			deleteStudent=false;
-//		}
-//		
-//		teamRepository.saveAndFlush(team);
-		//deleteTeamMember(team, studentService.convertToDto(studentService.findById(19)));
+	public void createMultipleTeam(long aid, int num) {
+		Assignment assignment=assignmentService.findById(aid);
+		for(int i =0;i<num;i++) {
+			Team tempTeam =new Team();
+			tempTeam.setId(0);
+			assignment.addTeam(tempTeam);
+			assignmentService.update(assignment);
+		}
 	}
 	
 	@Override
 	public void updateMemberMarks(long tid, TeamStudentDTO dto) {
 		Team team=findById(tid);
-		//team.getStudents().stream().filter(i->i.getStudent().getId()==dto.getId()).findFirst().orElse(null).setMark(dto.getMark());
-		//System.out.println(team.getStudents().stream().filter(i->i.getStudent().getId()==dto.getId()).findFirst().orElse(null).getStudent().toString());
 		team.getStudents().forEach(i->{
 			if(i.getStudent().getId()==dto.getId()) {
 				i.setMark(dto.getMark());
@@ -167,8 +136,13 @@ public class TeamService implements ITeamService{
 	
 	@Override
 	public void addTeamMember(long id, long sid) {
-		Team team=findById(id); 
-		team.addStudent(studentService.findById(sid));
+		Team team=findById(id);
+		Student student=studentService.findById(sid);
+		team.addStudent(student);
+		Student lead=team.getTeamLead();
+		if(lead==null) {
+			team.setTeamLead(student);
+		}
 		teamRepository.save(team);
 	}
 	
@@ -237,7 +211,10 @@ public class TeamService implements ITeamService{
 		assignment.getTeam().forEach(i->{
 			TeamDTO t=new TeamDTO(i.getId(), assignment, null, null);
 			t.setStudents(findAllTeamMemberByTeamID(t.getId()));
-			t.setTeamLead(modelMapper.map(i.getTeamLead(), SearchStudentDTO.class));
+			Student teamLead=i.getTeamLead();
+			if(teamLead != null){
+				t.setTeamLead(modelMapper.map(i.getTeamLead(), SearchStudentDTO.class));
+			}
 			teamdto.add(t);
 		});
 		dto.setAssignmentTeam(teamdto);
@@ -266,5 +243,40 @@ public class TeamService implements ITeamService{
 			flag=false;
 		}
 		return unteamedStudent;
+	}
+	
+	@Override
+	public void updateTeamMark(long id, double mark) {
+		Team team=findById(id);
+		team.setMark(mark);
+		int totalWeigtage = 0;
+			for (Task t : team.getTasks()) {
+				if (t.getStatus() == AssignmentStatus.COMPLETED) {
+					totalWeigtage = totalWeigtage + t.getWeightage();
+				}
+			}
+		
+		double avgPercentage=100/team.getStudents().size();
+		System.out.println(avgPercentage);
+		for (TeamStudent i : team.getStudents()) {
+			int weightage=0;
+			for (Task t : i.getStudent().getTasks()) {
+				if (t.getStatus() == AssignmentStatus.COMPLETED) {
+					weightage=weightage+t.getWeightage();
+				}
+			}
+			BigDecimal percentage = new BigDecimal(((double)weightage/(double)totalWeigtage)*100).setScale(2, RoundingMode.HALF_UP);
+			System.out.println(percentage);
+			if(percentage.doubleValue()>=avgPercentage) {
+				System.out.println("goog");
+				i.setMark(mark);
+			}else {
+				System.out.println("asd");
+				i.setMark(new BigDecimal(mark*((percentage.doubleValue()/avgPercentage))).setScale(2, RoundingMode.HALF_UP).doubleValue());
+			}
+		}
+	
+		
+		save(team);
 	}
 }

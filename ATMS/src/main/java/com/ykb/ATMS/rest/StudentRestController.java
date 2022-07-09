@@ -20,6 +20,7 @@ import com.ykb.ATMS.DTO.SearchStudentDTO;
 import com.ykb.ATMS.DTO.StudentInfoDTO;
 import com.ykb.ATMS.DTO.StudentListDTO;
 import com.ykb.ATMS.DTO.TeamDTO;
+import com.ykb.ATMS.entity.Assignment;
 import com.ykb.ATMS.entity.Student;
 import com.ykb.ATMS.entity.Team;
 import com.ykb.ATMS.service.Interface.IIntakeService;
@@ -78,6 +79,11 @@ public class StudentRestController {
 	@GetMapping("/students/getteams/{id}")
 	public List<TeamDTO> getTeamsById(@PathVariable long id){
 		return studentService.getTeamById(id);
+	}
+	
+	@GetMapping("/students/getAssignemntWithoutTeamById/{id}")
+	public List<Assignment> getAssignemntWithoutTeamById(@PathVariable long id){
+		return studentService.getAssignemntWithoutTeamById(id);
 	}
 	
 	@PostMapping("/students")

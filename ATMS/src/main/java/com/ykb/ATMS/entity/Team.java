@@ -65,6 +65,9 @@ public class Team {
 		inverseJoinColumns = @JoinColumn(name = "file_id"))
 	@JsonIgnore
 	private FileDB mainFile;
+	
+	@Column(name="mark")
+	private Double mark;
 
 	public Team() {
 		
@@ -128,6 +131,14 @@ public class Team {
 
 	public void setMainFile(FileDB mainFile) {
 		this.mainFile = mainFile;
+	}
+
+	public Double getMark() {
+		return mark;
+	}
+
+	public void setMark(Double mark) {
+		this.mark = mark;
 	}
 
 	public void addStudent(Student student) {
