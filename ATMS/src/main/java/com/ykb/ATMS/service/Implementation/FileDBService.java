@@ -15,6 +15,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.ykb.ATMS.DTO.FileReceiveDTO;
 import com.ykb.ATMS.DTO.FileRespondDTO;
+import com.ykb.ATMS.DTO.TeamDTO;
 import com.ykb.ATMS.entity.FileDB;
 import com.ykb.ATMS.entity.Student;
 import com.ykb.ATMS.entity.Task;
@@ -113,9 +114,24 @@ public class FileDBService implements IFileDBService{
 	}
 	
 	@Override
-	public List<FileRespondDTO> getFileListByTeamId(long tid) {
-		return teamService.findById(tid).getFiles().stream()
-				.map(i->convertFileToFileRespond(i)).toList();
+	public TeamDTO getFileListByTeamId(long tid) {
+		Team team=teamService.findById(tid);
+		if(team.getMainFile()!=null) {
+			TeamDTO dto= new TeamDTO(team.getId(), team.getAssignment(), teamService.findAllTeamMemberByTeamID(tid),
+					FileDBService.convertFileToFileRespond(team.getMainFile()), studentService.convertToDto(team.getTeamLead()));
+			dto.setFiles(team.getFiles().stream()
+					.map(i->convertFileToFileRespond(i))
+					.filter(i->i.getId()!=team.getMainFile().getId())
+					.toList());
+			return dto;
+		}else {
+			TeamDTO dto= new TeamDTO(team.getId(), team.getAssignment(), teamService.findAllTeamMemberByTeamID(tid),
+					null, studentService.convertToDto(team.getTeamLead()));
+			dto.setFiles(team.getFiles().stream()
+					.map(i->convertFileToFileRespond(i))
+					.toList());
+			return dto;
+		}
 	}
 	
 	@Override

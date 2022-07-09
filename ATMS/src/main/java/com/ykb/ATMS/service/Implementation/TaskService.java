@@ -101,10 +101,13 @@ public class TaskService implements ITaskService{
 		task.setEstimatedDueDate(dto.getEstimatedDueDate());
 		task.setDescription(dto.getDescription());
 		task.setStatus(dto.getStatus());
-		if(dto.getStudent()!=null)
-			task.setStudent(studentService.findById(dto.getStudent().getId()));
-		else
+		task.setWeightage(dto.getWeightage());
+		if(dto.getStudent()==null || dto.getStudent().getId()==0) {
 			task.setStudent(null);
+			task.setStatus(AssignmentStatus.UNASSIGNED);
+		}
+		else
+			task.setStudent(studentService.findById(dto.getStudent().getId()));
 		taskRepository.save(task);
 	}
 	

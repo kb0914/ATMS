@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ykb.ATMS.DTO.FileReceiveDTO;
 import com.ykb.ATMS.DTO.FileRespondDTO;
+import com.ykb.ATMS.DTO.TeamDTO;
 import com.ykb.ATMS.entity.FileDB;
 import com.ykb.ATMS.entity.Task;
 
@@ -30,6 +31,6 @@ public interface IFileDBService {
 
 	void storeMainFile(MultipartFile file, long tid, long sid) throws IOException;
 
-	List<FileRespondDTO> getFileListByTeamId(long tid);
+	TeamDTO getFileListByTeamId(long tid);
 
 }

@@ -68,8 +68,8 @@ public class TaskRestController {
 	@GetMapping("/tasks/{sid}/{tid}/{fid}")
 	public LinkTaskDTO getTasksByStudentAdnTeamID(@PathVariable long sid, @PathVariable long tid, @PathVariable long fid){
 		LinkTaskDTO dto = new LinkTaskDTO();
-		//List<Task> tasks=taskService.getTasksByStudentAdnTeamID(sid, tid);
-		List<Task> tasks=taskService.findByTeam(tid);
+		List<Task> tasks=taskService.getTasksByStudentAdnTeamID(sid, tid);
+		//List<Task> tasks=taskService.findByTeam(tid);
 		dto.setAllTask(tasks.stream().filter(i->i.getFile()==null).toList());
 		dto.setLinkedTask(tasks.stream()
 				.filter(i->i.getFile()!=null)

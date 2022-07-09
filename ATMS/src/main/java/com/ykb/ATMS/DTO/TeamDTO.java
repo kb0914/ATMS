@@ -12,6 +12,7 @@ public class TeamDTO {
 	private List<Task> tasks;
 	private SearchStudentDTO teamLead;
 	private FileRespondDTO mainFile;
+	private List<FileRespondDTO> files;
 	
 	public TeamDTO() {
 	}
@@ -86,6 +87,14 @@ public class TeamDTO {
 
 	public void setMainFile(FileRespondDTO mainFile) {
 		this.mainFile = mainFile;
+	}
+
+	public List<FileRespondDTO> getFiles() {
+		return files;
+	}
+
+	public void setFiles(List<FileRespondDTO> files) {
+		this.files = files;
 	}
 	
 	

@@ -22,6 +22,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.ykb.ATMS.DTO.FileRespondDTO;
 import com.ykb.ATMS.DTO.FileRespondMessage;
+import com.ykb.ATMS.DTO.TeamDTO;
 import com.ykb.ATMS.entity.FileDB;
 import com.ykb.ATMS.entity.Task;
 import com.ykb.ATMS.service.Interface.IFileDBService;
@@ -45,7 +46,7 @@ public class FileRestController {
 	}
 	
 	@GetMapping("/files/team/{tid}")
-	public ResponseEntity<List<FileRespondDTO>> getListFiles(@PathVariable long tid) {
+	public ResponseEntity<TeamDTO> getListFiles(@PathVariable long tid) {
 	    		
 	    return ResponseEntity.status(HttpStatus.OK).body(fileDBService.getFileListByTeamId(tid));
 	}
