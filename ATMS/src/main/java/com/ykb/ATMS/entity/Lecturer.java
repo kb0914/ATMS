@@ -19,13 +19,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name="lecturer")
 public class Lecturer extends User{
 	
-	@Column(name="first_name")
+	@Column(name="first_name", nullable=false, length=50)
 	private String firstName;
 	
-	@Column(name="last_name")
+	@Column(name="last_name", nullable=false, length=50)
 	private String lastName;
 	
-	@Column(name="email")
+	@Column(name="email", nullable=false, length=50)
 	private String email;
 
 	@OneToMany(mappedBy="lecturer",

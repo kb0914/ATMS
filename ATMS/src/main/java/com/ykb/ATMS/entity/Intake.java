@@ -25,7 +25,7 @@ public class Intake {
 	private long id;
 	
 	@Column(name="code",
-			unique = true)
+			unique = true,nullable=false, length=20)
 	private String code;
 	
 	@OneToMany(mappedBy="intake",

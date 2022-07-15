@@ -28,17 +28,17 @@ public class FileDB {
 	@Column(name="id")
 	private long id;
 	
-	@Column(name="name")
+	@Column(name="name", nullable=false, length=100)
 	private String name;
 	
-	@Column(name="type")
+	@Column(name="type", nullable=false, length=100)
 	private String type;
 	
 	@Lob
 	@Column(name="data_byte")
 	private byte[] data;
 	
-	@Column(name="updated_date")
+	@Column(name="upload_date")
 	private Date date;
 	
 	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})

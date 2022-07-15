@@ -20,7 +20,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name="assignemnt")
+@Table(name="assignment")
 public class Assignment {
 
 	@Id
@@ -28,7 +28,7 @@ public class Assignment {
 	@Column(name="id")
 	private long id;
 	
-	@Column(name="assingnemnt_name")
+	@Column(name="assignment_name", nullable=false, length=50)
 	private String name;
 	
 	@Column(name="description")

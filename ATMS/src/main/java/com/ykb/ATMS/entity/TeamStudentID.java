@@ -43,23 +43,7 @@ public class TeamStudentID implements Serializable{
 	public void setStudentID(Long studentID) {
 		this.studentId = studentID;
 	}
-
-//	@Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-// 
-//        if (o == null || getClass() != o.getClass())
-//            return false;
-// 
-//        TeamStudentID that = (TeamStudentID) o;
-//        return Objects.equals(team_id, that.team_id) &&
-//               Objects.equals(student_id, that.student_id);
-//    }
-// 
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(team_id, student_id);
-//    }
+	
 	public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

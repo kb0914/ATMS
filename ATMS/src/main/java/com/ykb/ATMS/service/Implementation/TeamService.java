@@ -72,13 +72,15 @@ public class TeamService implements ITeamService{
 	public TeamDTO getTeamDTOById(long id) {
 		
 		Team i=findById(id);
-		if(i.getMainFile()!=null) {
-			return new TeamDTO(i.getId(), i.getAssignment(), findAllTeamMemberByTeamID(id),
-					FileDBService.convertFileToFileRespond(i.getMainFile()), studentService.convertToDto(i.getTeamLead()));
-		}else {
-			return new TeamDTO(i.getId(), i.getAssignment(), findAllTeamMemberByTeamID(id),null,
-				studentService.convertToDto(i.getTeamLead()));
-		}
+		TeamDTO dto=new TeamDTO();
+		dto.setId(id);
+		dto.setAssignment(i.getAssignment());
+		if(i.getMainFile()!=null)
+			dto.setMainFile(FileDBService.convertFileToFileRespond(i.getMainFile()));
+		if(i.getTeamLead()!=null)
+			dto.setTeamLead(studentService.convertToDto(i.getTeamLead()));
+		dto.setStudents(findAllTeamMemberByTeamID(id));
+		return dto;
 	}
 	
 	@Override
@@ -93,6 +95,7 @@ public class TeamService implements ITeamService{
 		Team tempTeam =new Team();
 		tempTeam.setId(0);
 		tempTeam.setTeamLead(student);
+		tempTeam.setAssignment(assignment);
 		tempTeam=teamRepository.save(tempTeam);
 		tempTeam.addStudent(student);
 		assignment.addTeam(tempTeam);

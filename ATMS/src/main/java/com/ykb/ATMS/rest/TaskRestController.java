@@ -54,11 +54,7 @@ public class TaskRestController {
 	@GetMapping("/tasks/{id}")
 	public Task findById(@PathVariable long id){
 		
-		Task task = taskService.findById(id);
-		if(task==null)
-			throw new RuntimeException("Task id not found - " + id);
-		
-		return task;
+		return taskService.findById(id);
 	}
 	
 	@GetMapping("/tasks/team/{id}")
@@ -68,18 +64,15 @@ public class TaskRestController {
 	
 	@GetMapping("/tasks/{sid}/{tid}/{fid}")
 	public LinkTaskDTO getTasksByStudentAdnTeamID(@PathVariable long sid, @PathVariable long tid, @PathVariable long fid){
-		LinkTaskDTO dto = new LinkTaskDTO();
-		List<Task> tasks=taskService.getTasksByStudentAdnTeamID(sid, tid);
-		//List<Task> tasks=taskService.findByTeam(tid);
-		dto.setAllTask(tasks.stream().filter(i->i.getFile()==null).toList());
-		dto.setLinkedTask(tasks.stream()
-				.filter(i->i.getFile()!=null)
-				.filter(i->i.getFile().getId()==fid)
-				.toList());
-		return dto;
+		
+		return taskService.getTasksByStudentAndTeamID(sid, tid, fid);
 	}
 	
-	
+	@GetMapping("/tasks/{tid}/{fid}")
+	public LinkTaskDTO getTasksByTeamID(@PathVariable long tid, @PathVariable long fid){
+		
+		return taskService.getTasksByTeamID(tid, fid);
+	}
 	
 	@GetMapping("/tasks/TaskUpdateDTO/{id}")
 	public TaskUpdateDTO getTaskUpdateElement(@PathVariable long id) {

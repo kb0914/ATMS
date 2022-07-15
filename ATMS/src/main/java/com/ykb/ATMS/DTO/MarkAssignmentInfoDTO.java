@@ -8,15 +8,16 @@ public class MarkAssignmentInfoDTO {
 	private int totalWeigthage;
 	private double teamMark;
 	
+	public MarkAssignmentInfoDTO() {
+	}
+	
 	public MarkAssignmentInfoDTO(FileRespondDTO mainFile, List<StudentTasksDTO> studentTasks, int totalWeigthage) {
-		super();
 		this.mainFile = mainFile;
 		this.studentTasks = studentTasks;
 		this.totalWeigthage = totalWeigthage;
 	}
 	
 	public MarkAssignmentInfoDTO(FileRespondDTO mainFile, List<StudentTasksDTO> studentTasks, int totalWeigthage, double teamMark) {
-		super();
 		this.mainFile = mainFile;
 		this.studentTasks = studentTasks;
 		this.totalWeigthage = totalWeigthage;

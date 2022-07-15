@@ -24,18 +24,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name="student")
 public class Student extends User{
 
-	@Column(name="first_name")
+	@Column(name="first_name", nullable=false, length=50)
 	private String firstName;
 	
-	@Column(name="last_name")
+	@Column(name="last_name", nullable=false, length=50)
 	private String lastName;
 	
-	@Column(name="email")
+	@Column(name="email", nullable=false, length=50)
 	private String email;
-	
-	@Column(name="password")
-	@JsonIgnore
-	private String password;
 	
 	@OneToMany(
 		fetch = FetchType.LAZY, 
@@ -47,7 +43,7 @@ public class Student extends User{
     private List<TeamStudent> teams;
 	
 	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
-	@JoinColumn(name="intake_id")
+	@JoinColumn(name="intake_id", nullable=false)
 	private Intake intake;
 	
 	@OneToMany(mappedBy="student",
@@ -71,7 +67,7 @@ public class Student extends User{
 	public Student() {
 	}
 
-	public Student(String username, String firstName, String lastName, String email, String password, String intake) {
+	public Student(String username, String firstName, String lastName, String email, String password) {
 		this.username=username;
 		this.firstName = firstName;
 		this.lastName = lastName;

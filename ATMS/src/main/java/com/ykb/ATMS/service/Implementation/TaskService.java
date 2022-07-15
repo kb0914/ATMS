@@ -9,8 +9,10 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.ykb.ATMS.DTO.DistributeTasksDTO;
+import com.ykb.ATMS.DTO.LinkTaskDTO;
 import com.ykb.ATMS.DTO.MarkAssignmentInfoDTO;
 import com.ykb.ATMS.DTO.StudentTasksDTO;
 import com.ykb.ATMS.DTO.TeamStudentDTO;
@@ -193,13 +195,43 @@ public class TaskService implements ITaskService {
 			temp.setCompletedTaskPercentage(percentage.doubleValue());
 			dto.add(temp);
 		}
-		if (team.getMark() != null) {
-			return new MarkAssignmentInfoDTO(FileDBService.convertFileToFileRespond(team.getMainFile()), dto,
-					totalWeigtage, team.getMark());
-		}else {
-			return new MarkAssignmentInfoDTO(FileDBService.convertFileToFileRespond(team.getMainFile()), dto,
-					totalWeigtage);
+		MarkAssignmentInfoDTO maiDto=new MarkAssignmentInfoDTO();
+		FileDB file=team.getMainFile();
+		if(file!=null) {
+			maiDto.setMainFile(FileDBService.convertFileToFileRespond(team.getMainFile()));
 		}
+		maiDto.setStudentTasks(dto);
+		maiDto.setTotalWeigthage(totalWeigtage);
+		if(team.getMark()!=null) {
+			maiDto.setTeamMark(team.getMark());
+		}
+		return maiDto;
+	}
+	
+	@Override
+	public LinkTaskDTO getTasksByStudentAndTeamID(long sid, long tid, long fid){
+		LinkTaskDTO dto = new LinkTaskDTO();
+		List<Task> tasks=getTasksByStudentAdnTeamID(sid, tid);
+		//List<Task> tasks=taskService.findByTeam(tid);
+		dto.setAllTask(tasks.stream().filter(i->i.getFile()==null).toList());
+		dto.setLinkedTask(tasks.stream()
+				.filter(i->i.getFile()!=null)
+				.filter(i->i.getFile().getId()==fid)
+				.toList());
+		return dto;
+	}
+	
+	@Override
+	public LinkTaskDTO getTasksByTeamID(long tid, long fid){
+		LinkTaskDTO dto = new LinkTaskDTO();
+		//List<Task> tasks=getTasksByStudentAdnTeamID(sid, tid);
+		List<Task> tasks=findByTeam(tid);
+		dto.setAllTask(tasks.stream().filter(i->i.getFile()==null).toList());
+		dto.setLinkedTask(tasks.stream()
+				.filter(i->i.getFile()!=null)
+				.filter(i->i.getFile().getId()==fid)
+				.toList());
+		return dto;
 	}
 
 	private static int sumOfList(List<Task> list) {

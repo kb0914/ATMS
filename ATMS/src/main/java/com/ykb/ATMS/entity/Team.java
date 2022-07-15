@@ -32,7 +32,7 @@ public class Team {
 	private long id;
 	
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
-	@JoinColumn(name="assingment_id")
+	@JoinColumn(name="assignment_id", nullable=false)
 	private Assignment assignment;
 	
 	@OneToMany(

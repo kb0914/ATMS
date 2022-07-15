@@ -27,7 +27,7 @@ public class Task {
 	@Column(name="id")
 	private long id;
 	
-	@Column(name="tittle")
+	@Column(name="tittle", nullable=false, length=50)
 	private String tittle;
 	
 	@Column(name="description")
@@ -45,11 +45,11 @@ public class Task {
 	@Column(name = "status")
 	private AssignmentStatus status;
 	
-	@Column(name="weightage")
+	@Column(name="weightage", nullable=false)
 	private int weightage;
 	
 	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
-	@JoinColumn(name="team_id")
+	@JoinColumn(name="team_id", nullable=false)
 	private Team team;
 	
 	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
