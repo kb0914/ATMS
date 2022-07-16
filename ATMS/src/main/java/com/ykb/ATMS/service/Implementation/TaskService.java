@@ -139,27 +139,37 @@ public class TaskService implements ITaskService {
 	@Override
 	public DistributeTasksDTO distributeTasks(long teamId, List<Task> tasks) {
 
-		List<Student> members = teamService.findById(teamId).getStudents().stream().map(i -> i.getStudent()).toList();
+		List<Student> members = teamService.findById(teamId).getStudents().stream()
+				.map(i -> i.getStudent())
+				.toList();
 
 		List<Integer> weightages = new ArrayList<Integer>();
 		tasks.sort((o1, o2) -> o2.getWeightage() - o1.getWeightage());
-		System.out.println(tasks);
+		
 		for (int i = 0; i < tasks.size(); i++) {
+			
 			members = members.stream().sorted((s1, s2) -> {
-				int list1Sum = s1.getTasks().stream().filter(team -> team.getTeam().getId() == teamId)
-						.mapToInt(t -> t.getWeightage()).sum();
-				int list2Sum = s2.getTasks().stream().filter(team -> team.getTeam().getId() == teamId)
-						.mapToInt(t -> t.getWeightage()).sum();
+				
+				int list1Sum = s1.getTasks().stream()
+						.filter(team -> team.getTeam().getId() == teamId)
+						.mapToInt(t -> t.getWeightage())
+						.sum();
+				
+				int list2Sum = s2.getTasks().stream()
+						.filter(team -> team.getTeam().getId() == teamId)
+						.mapToInt(t -> t.getWeightage())
+						.sum();
+				
 				return list1Sum - list2Sum;
 			}).collect(Collectors.toList());
+			
 			members.get(0).addTask(tasks.get(i));
 		}
 
 		for (Student i : members) {
-			System.out.println(i.getFirstName() + " :" + sumOfList(i.getTasks()));
-			System.out.println(i.getFirstName() + " :");
-			i.getTasks().forEach(a -> System.out.println(a.getWeightage()));
-			weightages.add(sumOfList(i.getTasks()));
+			weightages.add(sumOfList(i.getTasks().stream()
+					.filter(task->task.getTeam().getId()==teamId)
+					.toList()));
 		}
 
 		return new DistributeTasksDTO(tasks, weightages);

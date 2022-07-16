@@ -42,26 +42,24 @@ public class JwtAuthenticationRestController {
 	public ResponseEntity<?> generateAuthenticationToken(@RequestBody AuthRequestDTO authenticationRequest)
 			throws Exception {
 		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
-		CustomUserDetails userDetails=new CustomUserDetails();
-		userDetails = userDetailsService
-				.loadUserByUsername(authenticationRequest.getUsername());
-		
+		CustomUserDetails userDetails = new CustomUserDetails();
+		userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+
 		final String token = jwtTokenUtil.generateToken(userDetails);
-		return ResponseEntity.ok(new AuthResponseDTO(token, userDetails.getId(), userDetails.getUsername(), userDetails.getAuthorities().toArray()[0].toString()));
+		return ResponseEntity.ok(new AuthResponseDTO(token, userDetails.getId(), userDetails.getUsername(),
+				userDetails.getAuthorities().toArray()[0].toString()));
 	}
-	
+
 	@RequestMapping(value = "/verifyPassword", method = RequestMethod.POST)
-	public ResponseEntity<?> verifyPassword(@RequestBody AuthRequestDTO authenticationRequest)
-			throws Exception {
+	public ResponseEntity<?> verifyPassword(@RequestBody AuthRequestDTO authenticationRequest) throws Exception {
 		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
-		
+
 		return ResponseEntity.ok(true);
 	}
-	
+
 	@RequestMapping(value = "/changePassword/{uid}", method = RequestMethod.POST)
-	public ResponseEntity<?> changePassword(@RequestBody String password, @PathVariable long uid)
-			throws Exception {
-		System.out.println(password+".");
+	public ResponseEntity<?> changePassword(@RequestBody String password, @PathVariable long uid) throws Exception {
+		System.out.println(password + ".");
 		userDetailsService.changePassword(uid, password);
 		return ResponseEntity.ok(true);
 	}
@@ -69,7 +67,7 @@ public class JwtAuthenticationRestController {
 	private void authenticate(String username, String password) throws Exception {
 		Objects.requireNonNull(username);
 		Objects.requireNonNull(password);
-		
+
 		try {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 		} catch (DisabledException e) {
