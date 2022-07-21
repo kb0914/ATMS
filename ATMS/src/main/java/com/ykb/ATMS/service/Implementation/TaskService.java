@@ -135,7 +135,7 @@ public class TaskService implements ITaskService {
 	public List<Task> getTasksByStudentAdnTeamID(long sid, long tid) {
 		return taskRepository.findByStudentAndTeam(sid, tid);
 	}
-
+	
 	@Override
 	public DistributeTasksDTO distributeTasks(long teamId, List<Task> tasks) {
 
@@ -200,9 +200,11 @@ public class TaskService implements ITaskService {
 				if (t.getStatus() == AssignmentStatus.STARTED)
 					temp.setStartedTaskNum(temp.getStartedTaskNum() + t.getWeightage());
 			}
+			if(temp.getCompletedTaskNum()!=0) {
 			BigDecimal percentage = new BigDecimal(((double) temp.getCompletedTaskNum() / totalWeigtage) * 100)
 					.setScale(2, RoundingMode.HALF_UP);
 			temp.setCompletedTaskPercentage(percentage.doubleValue());
+			}
 			dto.add(temp);
 		}
 		MarkAssignmentInfoDTO maiDto=new MarkAssignmentInfoDTO();

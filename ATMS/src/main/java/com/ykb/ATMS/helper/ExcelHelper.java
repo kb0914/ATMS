@@ -17,7 +17,7 @@ public class ExcelHelper {
 
 	public static String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
-	static String[] HEADERs = { "Team_ID", "Stundet_ID", "Mark" };
+	static String[] HEADERs = { "Team_ID", "Stundet_Username", "First_Name","Last_Name","Mark" };
 
 	static String SHEET = "Assignment_MarK";
 
@@ -38,7 +38,9 @@ public class ExcelHelper {
 					Row row = sheet.createRow(rowIdx++);
 					row.createCell(0).setCellValue(ts.getTeam().getId());
 					row.createCell(1).setCellValue(ts.getStudent().getUsername());
-					row.createCell(2).setCellValue(ts.getMark());
+					row.createCell(2).setCellValue(ts.getStudent().getFirstName());
+					row.createCell(3).setCellValue(ts.getStudent().getLastName());
+					row.createCell(4).setCellValue(ts.getMark());
 				}
 			}
 			workbook.write(out);
