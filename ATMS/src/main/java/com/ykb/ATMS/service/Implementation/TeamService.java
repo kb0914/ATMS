@@ -11,14 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.ykb.ATMS.DTO.MarkAssignmentInfoDTO;
 import com.ykb.ATMS.DTO.SearchStudentDTO;
-import com.ykb.ATMS.DTO.StudentTasksDTO;
 import com.ykb.ATMS.DTO.TeamDTO;
 import com.ykb.ATMS.DTO.TeamListDTO;
 import com.ykb.ATMS.DTO.TeamStudentDTO;
 import com.ykb.ATMS.entity.Assignment;
-import com.ykb.ATMS.entity.FileDB;
 import com.ykb.ATMS.entity.Student;
 import com.ykb.ATMS.entity.Task;
 import com.ykb.ATMS.entity.Team;
@@ -36,7 +33,6 @@ public class TeamService implements ITeamService {
 	private TeamRepository teamRepository;
 	private IAssignmentService assignmentService;
 	private IStudentService studentService;
-	// private ITaskService taskService;
 	private ModelMapper modelMapper;
 
 	@Autowired
@@ -45,7 +41,6 @@ public class TeamService implements ITeamService {
 		this.teamRepository = teamRepository;
 		this.assignmentService = assignmentService;
 		this.studentService = studentService;
-		// this.taskService=taskService;
 		this.modelMapper = modelMapper;
 	}
 

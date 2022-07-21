@@ -1,6 +1,5 @@
-	package com.ykb.ATMS.rest;
+package com.ykb.ATMS.rest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ykb.ATMS.DTO.SearchStudentDTO;
-import com.ykb.ATMS.DTO.StudentTasksDTO;
 import com.ykb.ATMS.DTO.TeamDTO;
 import com.ykb.ATMS.DTO.TeamListDTO;
 import com.ykb.ATMS.DTO.TeamStudentDTO;

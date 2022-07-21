@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import com.ykb.ATMS.DTO.DistributeTasksDTO;
 import com.ykb.ATMS.DTO.LinkTaskDTO;
@@ -76,15 +75,6 @@ public class TaskService implements ITaskService {
 			team.addTask(task);
 			teamService.save(team);
 		}
-
-//		Optional<Student> result1=studentRepository.findById(sid);
-//		Student student=null;
-//		if(result1!=null) {
-//			student=result1.get();
-//			student.addTask(task);
-//			studentRepository.save(student);
-//		}else
-//			throw new RuntimeException("Student ID not found - "+tid);
 	}
 
 	@Override
@@ -224,7 +214,6 @@ public class TaskService implements ITaskService {
 	public LinkTaskDTO getTasksByStudentAndTeamID(long sid, long tid, long fid){
 		LinkTaskDTO dto = new LinkTaskDTO();
 		List<Task> tasks=getTasksByStudentAdnTeamID(sid, tid);
-		//List<Task> tasks=taskService.findByTeam(tid);
 		dto.setAllTask(tasks.stream().filter(i->i.getFile()==null).toList());
 		dto.setLinkedTask(tasks.stream()
 				.filter(i->i.getFile()!=null)
@@ -236,7 +225,6 @@ public class TaskService implements ITaskService {
 	@Override
 	public LinkTaskDTO getTasksByTeamID(long tid, long fid){
 		LinkTaskDTO dto = new LinkTaskDTO();
-		//List<Task> tasks=getTasksByStudentAdnTeamID(sid, tid);
 		List<Task> tasks=findByTeam(tid);
 		dto.setAllTask(tasks.stream().filter(i->i.getFile()==null).toList());
 		dto.setLinkedTask(tasks.stream()

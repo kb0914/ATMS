@@ -14,7 +14,6 @@ import com.ykb.ATMS.DTO.StudentListDTO;
 import com.ykb.ATMS.DTO.TeamDTO;
 import com.ykb.ATMS.entity.Assignment;
 import com.ykb.ATMS.entity.Student;
-import com.ykb.ATMS.entity.Team;
 import com.ykb.ATMS.repository.StudentRepository;
 import com.ykb.ATMS.service.Interface.IStudentService;
 
@@ -96,7 +95,6 @@ public class StudentService implements IStudentService {
 		student.setLastName(dto.getLastName());
 		student.setEmail(dto.getEmail());
 		student.setIntake(dto.getIntake());
-		//student.setPassword(bcryptEncoder.encode(dto.getPassword()));
 		
 		return studentRepository.save(student);
 	}

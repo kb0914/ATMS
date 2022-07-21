@@ -10,10 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.ykb.ATMS.DTO.LecturerInfoDTO;
 import com.ykb.ATMS.DTO.SearchLecturerDTO;
-import com.ykb.ATMS.DTO.SearchStudentDTO;
-import com.ykb.ATMS.DTO.StudentInfoDTO;
 import com.ykb.ATMS.entity.Lecturer;
-import com.ykb.ATMS.entity.Student;
 import com.ykb.ATMS.repository.LecturerRepository;
 import com.ykb.ATMS.service.Interface.ILecturerService;
 
@@ -83,7 +80,6 @@ public class LecturerService implements ILecturerService{
 		lec.setFirstName(dto.getFirstName());
 		lec.setLastName(dto.getLastName());
 		lec.setEmail(dto.getEmail());
-		//lec.setPassword(bcryptEncoder.encode(dto.getPassword()));
 		
 		return lecturerRepository.save(lec);
 	}

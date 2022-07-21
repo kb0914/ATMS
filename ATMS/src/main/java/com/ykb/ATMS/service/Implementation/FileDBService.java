@@ -2,7 +2,6 @@ package com.ykb.ATMS.service.Implementation;
 
 import java.io.IOException;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -13,7 +12,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.ykb.ATMS.DTO.FileReceiveDTO;
 import com.ykb.ATMS.DTO.FileRespondDTO;
 import com.ykb.ATMS.DTO.TeamDTO;
 import com.ykb.ATMS.entity.FileDB;

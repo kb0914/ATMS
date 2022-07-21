@@ -1,13 +1,11 @@
 package com.ykb.ATMS.service.Implementation;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ykb.ATMS.DTO.SearchLecturerDTO;
 import com.ykb.ATMS.entity.Intake;
 import com.ykb.ATMS.repository.IntakeRepository;
 import com.ykb.ATMS.service.Interface.IIntakeService;

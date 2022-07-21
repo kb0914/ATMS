@@ -2,7 +2,6 @@ package com.ykb.ATMS.rest;
 
 import java.util.List;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -22,8 +21,6 @@ import com.ykb.ATMS.DTO.StudentListDTO;
 import com.ykb.ATMS.DTO.TeamDTO;
 import com.ykb.ATMS.entity.Assignment;
 import com.ykb.ATMS.entity.Student;
-import com.ykb.ATMS.entity.Team;
-import com.ykb.ATMS.service.Interface.IIntakeService;
 import com.ykb.ATMS.service.Interface.IStudentService;
 
 @RestController
@@ -32,12 +29,10 @@ import com.ykb.ATMS.service.Interface.IStudentService;
 public class StudentRestController {
 
 	private IStudentService studentService;
-	private ModelMapper modelMapper;
 	
 	@Autowired
-	public StudentRestController(IStudentService studentService, ModelMapper modelMapper) {
+	public StudentRestController(IStudentService studentService) {
 		this.studentService = studentService;
-		this.modelMapper=modelMapper;
 	}
 	
 	@GetMapping("/students")
@@ -53,10 +48,6 @@ public class StudentRestController {
 	
 	@GetMapping("/students/{studentId}")
 	public Student findById(@PathVariable long studentId){
-		
-//		Student student = studentService.findById(studentId);
-//		
-//		return modelMapper.map(student, StudentInfoDTO.class);
 		return studentService.findById(studentId);
 	}
 	

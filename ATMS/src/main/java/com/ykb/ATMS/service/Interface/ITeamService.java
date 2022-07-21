@@ -3,12 +3,9 @@ package com.ykb.ATMS.service.Interface;
 import java.util.List;
 
 import com.ykb.ATMS.DTO.SearchStudentDTO;
-import com.ykb.ATMS.DTO.StudentTasksDTO;
 import com.ykb.ATMS.DTO.TeamDTO;
 import com.ykb.ATMS.DTO.TeamListDTO;
 import com.ykb.ATMS.DTO.TeamStudentDTO;
-import com.ykb.ATMS.entity.Assignment;
-import com.ykb.ATMS.entity.Student;
 import com.ykb.ATMS.entity.Team;
 
 public interface ITeamService {

@@ -1,7 +1,5 @@
 package com.ykb.ATMS.DTO;
 
-import com.ykb.ATMS.entity.Intake;
-
 public class SearchLecturerDTO {
 
 	private long id;

@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.util.List;
 
 import com.ykb.ATMS.entity.Assignment;
-import com.ykb.ATMS.entity.Lecturer;
 
 public interface IAssignmentService {
 

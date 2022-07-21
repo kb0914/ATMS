@@ -8,8 +8,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,11 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ykb.ATMS.DTO.AuthRequestDTO;
 import com.ykb.ATMS.DTO.AuthResponseDTO;
-import com.ykb.ATMS.DTO.StudentInfoDTO;
 import com.ykb.ATMS.config.CustomUserDetails;
 import com.ykb.ATMS.config.JwtTokenUtil;
 import com.ykb.ATMS.config.JwtUserDetailsService;
-import com.ykb.ATMS.entity.User;
 
 @CrossOrigin
 @RestController

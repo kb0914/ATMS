@@ -5,9 +5,6 @@ import java.util.List;
 import com.ykb.ATMS.DTO.DistributeTasksDTO;
 import com.ykb.ATMS.DTO.LinkTaskDTO;
 import com.ykb.ATMS.DTO.MarkAssignmentInfoDTO;
-import com.ykb.ATMS.DTO.StudentTasksDTO;
-import com.ykb.ATMS.DTO.TaskUpdateDTO;
-import com.ykb.ATMS.entity.Student;
 import com.ykb.ATMS.entity.Task;
 
 public interface ITaskService {

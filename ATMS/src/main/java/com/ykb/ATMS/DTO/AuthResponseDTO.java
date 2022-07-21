@@ -1,9 +1,5 @@
 package com.ykb.ATMS.DTO;
 
-import java.util.Collection;
-
-import org.springframework.security.core.GrantedAuthority;
-
 public class AuthResponseDTO {
 
 	private static final long serialVersionUID = -8091879091924046844L;

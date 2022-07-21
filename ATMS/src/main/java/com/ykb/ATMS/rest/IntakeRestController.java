@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ykb.ATMS.entity.Intake;
-import com.ykb.ATMS.entity.Student;
 import com.ykb.ATMS.service.Interface.IIntakeService;
 
 @RestController

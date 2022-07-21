@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ykb.ATMS.DTO.LecturerInfoDTO;
 import com.ykb.ATMS.DTO.SearchLecturerDTO;
-import com.ykb.ATMS.entity.Intake;
 import com.ykb.ATMS.entity.Lecturer;
 import com.ykb.ATMS.service.Interface.ILecturerService;
 

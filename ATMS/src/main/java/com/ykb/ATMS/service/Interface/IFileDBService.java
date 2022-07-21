@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ykb.ATMS.DTO.FileReceiveDTO;
 import com.ykb.ATMS.DTO.FileRespondDTO;
 import com.ykb.ATMS.DTO.TeamDTO;
 import com.ykb.ATMS.entity.FileDB;

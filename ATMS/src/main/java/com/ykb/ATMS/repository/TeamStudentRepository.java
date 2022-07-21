@@ -1,11 +1,8 @@
 package com.ykb.ATMS.repository;
 
-import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.ykb.ATMS.entity.Student;
 import com.ykb.ATMS.entity.TeamStudent;
 import com.ykb.ATMS.entity.TeamStudentID;
 
